@@ -17,11 +17,11 @@ public class InMemoryFlightRepository implements FlightRepository {
 
     public InMemoryFlightRepository() {
         Flight flight = new Flight();
-        flight.setId("1");
-        flight.setCode("1MaBa");
+        flight.setId("12024-01-12");
+        flight.setCode("1");
         flight.setOrigin("Madrid");
         flight.setDestination("Barcelona");
-        flight.setDate(new Date(2024 - 1900, 1, 12));
+        flight.setDate(new Date(2024-1990, 1, 12));
         flights.put(flight.getId(), flight);
     }
 
@@ -37,9 +37,7 @@ public class InMemoryFlightRepository implements FlightRepository {
     }
 
     @Override
-    public Flight getFlight(
-            String flightId
-    ) {
+    public Flight getFlight(String flightId) {
         return flights.get(flightId);
     }
 

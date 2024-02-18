@@ -1,5 +1,6 @@
 package org.educa.airline.repository;
 
+import org.educa.airline.entity.Flight;
 import org.educa.airline.entity.Passenger;
 
 import java.util.List;
@@ -19,4 +20,6 @@ public interface PassengerRepository {
     boolean addPassenger(Passenger passenger);
 
     void updatePassenger(String nif, Passenger passenger);
+
+
 }

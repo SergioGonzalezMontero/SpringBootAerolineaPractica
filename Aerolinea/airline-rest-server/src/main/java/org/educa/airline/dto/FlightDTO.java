@@ -26,6 +26,5 @@ public class FlightDTO {
     private String destination;
 
     @NotNull
-    @Future
-    private Date date;
+    private String date;
 }

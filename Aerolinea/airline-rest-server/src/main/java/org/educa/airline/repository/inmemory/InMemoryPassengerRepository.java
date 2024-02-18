@@ -1,19 +1,30 @@
 package org.educa.airline.repository.inmemory;
 
+import org.educa.airline.entity.Flight;
 import org.educa.airline.entity.Passenger;
 import org.educa.airline.repository.PassengerRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
 public class InMemoryPassengerRepository implements PassengerRepository {
     // Por cada vuelo, habrá un mapa de pasajeros
     private final Map<String, Map<String, Passenger>> passengers = new HashMap<>();
+
+    public InMemoryPassengerRepository() {
+        Passenger passenger = new Passenger();
+        passenger.setNif("12345678A");
+        passenger.setFlightId("12024-01-12");
+        passenger.setName("Sergio");
+        passenger.setSurname("Gonzalez");
+        passenger.setEmail("sergio@g.com");
+        passenger.setSeatNumber(5);
+
+
+
+    }
 
     @Override
     public List<Passenger> listPassengers() {

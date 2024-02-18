@@ -10,9 +10,10 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Flight {
-    private String id;
     private String code;
     private String origin;
     private String destination;
     private Date date;
+    private String id;
+
 }
