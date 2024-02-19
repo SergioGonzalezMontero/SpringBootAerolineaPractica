@@ -81,7 +81,7 @@ public class FlightService {
         String destination = sc.nextLine();
         System.out.println("Introduce la fecha: (aaaa-mm-dd)");
         String date = sc.nextLine();
-        String id = code + date;
+        String id = code +"-"+ date;
         FlightDTO flightDTO = new FlightDTO(code, origin, destination, date, id);
         System.out.println("La ID de vuelo es "+flightDTO.getId());
         try {

@@ -4,10 +4,11 @@ import org.educa.airline.entity.Flight;
 import org.educa.airline.entity.Passenger;
 import org.educa.airline.repository.inmemory.InMemoryPassengerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-
+@Service
 public class PassengerService {
     private final InMemoryPassengerRepository inMemoryPassengerRepository;
     private final FlightService flight;
@@ -33,8 +34,8 @@ public class PassengerService {
         }
       //  return passengerRepository.getPassenger(id);
     }*/
-    public void create(Passenger passenger){
-        inMemoryPassengerRepository.addPassenger(passenger);
+    public boolean create(String id, Passenger passenger){
+        return inMemoryPassengerRepository.addPassenger(passenger);
     }
     public void update(Passenger passenger, String id) throws Exception {
        // passengerRepository.updatePassenger();

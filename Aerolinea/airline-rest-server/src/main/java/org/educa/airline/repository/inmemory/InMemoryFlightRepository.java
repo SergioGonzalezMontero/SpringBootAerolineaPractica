@@ -17,7 +17,7 @@ public class InMemoryFlightRepository implements FlightRepository {
 
     public InMemoryFlightRepository() {
         Flight flight = new Flight();
-        flight.setId("12024-01-12");
+        flight.setId("1-2024-01-12");
         flight.setCode("1");
         flight.setOrigin("Madrid");
         flight.setDestination("Barcelona");

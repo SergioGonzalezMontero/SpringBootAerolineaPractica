@@ -2,11 +2,12 @@ package org.educa.airline.mappers;
 
 import org.educa.airline.dto.PassengerDTO;
 import org.educa.airline.entity.Passenger;
+import org.springframework.stereotype.Component;
 
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Component
 public class PassengerMapper {
     public Passenger toEntity(PassengerDTO passengerDTO) {
         Passenger passenger = new Passenger();

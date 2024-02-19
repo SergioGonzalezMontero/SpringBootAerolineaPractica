@@ -7,7 +7,7 @@ import lombok.Data;
 public class PassengerDTO {
     @NotNull
     @NotEmpty
-    @Pattern(regexp = "\\d{8}[A-Za-z]", message = "El NIF debe tener un formato válido")
+
     private String nif;
 
     @NotNull
@@ -24,7 +24,7 @@ public class PassengerDTO {
 
     @NotNull
     @NotEmpty
-    @Email
+
     private String email;
 
     @NotNull

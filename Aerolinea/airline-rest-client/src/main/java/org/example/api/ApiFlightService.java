@@ -21,7 +21,7 @@ public class ApiFlightService extends AppiService{
 
 
     public FlightDTO findflightCodeDate(String code, String date) throws Exception {
-        String body = connection.doGet(URL + "/"+code+date+"?date="+date);
+        String body = connection.doGet(URL + "/"+code+"-"+date+"?date="+date);
         Gson gson = new Gson();
         FlightDTO flightDTO = gson.fromJson(body, FlightDTO.class);
         return flightDTO;
