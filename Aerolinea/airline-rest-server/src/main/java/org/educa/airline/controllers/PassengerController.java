@@ -6,6 +6,7 @@ import org.educa.airline.dto.PassengerDTO;
 import org.educa.airline.entity.Flight;
 import org.educa.airline.entity.Passenger;
 import org.educa.airline.mappers.PassengerMapper;
+import org.educa.airline.services.FlightService;
 import org.educa.airline.services.PassengerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +48,82 @@ public class PassengerController {
         List<PassengerDTO> passengerDTOSs = passengerMapper.toDTOs(
                 passengerService.findAllPassangerOfFlight(id));
         return ResponseEntity.ok(passengerDTOSs);
+    }
+
+    // CHEQUEO PASAJERO EN UN VUELO
+    ////////////////7
+    /////////////// repasar
+    ///////////////
+    @GetMapping(path = "/passenger/{nif}")
+    public ResponseEntity<Void> existPassenger(@PathVariable("id") String id, @PathVariable("nif") String nif){
+
+        try{
+            if(passengerService.exitPassenger(id, nif)){
+                return ResponseEntity.ok().build();
+            }else{
+                return ResponseEntity.notFound().build();
+            }
+
+        }catch (Exception e){
+            System.err.println(e);
+            return ResponseEntity.badRequest().build();
+        }
+
+    }
+
+    @PutMapping(path = "/flights/{id}/passenger/{nif}")
+    public ResponseEntity<PassengerDTO> updatePassenger(@PathVariable("id")String id,@RequestParam(value = "date")String date, @PathVariable("nif") String nif, @RequestBody PassengerDTO passengerDTO) {
+        // Buscar el vuelo por id
+        FlightService flightService = null;
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateCasted = castStringDate(date, formato);
+        Flight flight = null;
+        try {
+            flight = flightService.findFlightByIdDate(id, dateCasted);
+            // Buscar el pasajero por nif en el vuelo
+            Passenger passenger = null;
+            for (Passenger p : flight.getId("id")) {
+                if (p.getNif().equals(nif)) {
+                    passenger = p;
+                    break;
+                }
+            }
+
+            if (passenger == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+
+            if(!"".equals(passenger.getNif())) {
+                passenger.setNif(passengerDTO.getNif());
+            }
+            // Actualizar los datos del pasajero
+            if(!"".equals(passenger.getName())) {
+                passenger.setName(passengerDTO.getName());
+            }
+
+            if(!"".equals(passenger.getSurname())) {
+                passenger.setSurname(passengerDTO.getSurname());
+            }
+
+            if(!"".equals(passenger.getEmail())) {
+                passenger.setEmail(passengerDTO.getEmail());
+            }
+            if(0!=(passenger.getSeatNumber())) {
+                passenger.setSeatNumber(passengerDTO.getSeatNumber()););
+            }
+
+
+            // Devolver el pasajero actualizado
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+
+
+
     }
 
   /*  @GetMapping(path = "/findAll/{origin}&{destination}")

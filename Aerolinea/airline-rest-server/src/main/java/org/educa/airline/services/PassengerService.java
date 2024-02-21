@@ -52,7 +52,7 @@ public class PassengerService {
         Flight fligthFind = flight.findFlightByIdDate(code,date);
         passenger.setFlightId(fligthFind.getId());
     }
-    public void passengerCheckFlight(){
-
+    public boolean exitPassenger(String id, String nif){
+        return inMemoryPassengerRepository.existPassenger(id,nif);
     }
 }
