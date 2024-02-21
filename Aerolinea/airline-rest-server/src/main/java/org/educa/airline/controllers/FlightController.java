@@ -24,28 +24,28 @@ public class FlightController {
 
     @Autowired
     public FlightController(FlightService flightService,
-                            FlightMapper flightMapper){
+                            FlightMapper flightMapper) {
         this.flightService = flightService;
         this.flightMapper = flightMapper;
     }
 
     @GetMapping(path = "")
-    public ResponseEntity<List<FlightDTO>> findAllFlight(@RequestParam(value = "ori")String origin,@RequestParam(value = "des")String destination){
+    public ResponseEntity<List<FlightDTO>> findAllFlight(@RequestParam(value = "ori") String origin, @RequestParam(value = "des") String destination) {
         List<FlightDTO> flightDTOs = flightMapper.toDTOs(
                 flightService.findAllFlight(origin, destination));
         return ResponseEntity.ok(flightDTOs);
     }
 
-    @GetMapping(path= "/{id}")
-    public ResponseEntity<FlightDTO> findFlightByID(@PathVariable("id")String id,@RequestParam(value = "date")String date){
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<FlightDTO> findFlightByID(@PathVariable("id") String id, @RequestParam(value = "date") String date) {
         FlightDTO flightDTO = null;
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
         Date dateCasted = castStringDate(date, formato);
-        try{
+        try {
             flightDTO = flightMapper.toDTO(
                     flightService.findFlightByIdDate(id, dateCasted));
             return ResponseEntity.ok(flightDTO);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.err.println(e);
             return ResponseEntity.notFound().build();
         }
@@ -53,8 +53,8 @@ public class FlightController {
 
     private static Date castStringDate(String date, SimpleDateFormat formato) {
         try {
-           Date fechaDate = formato.parse(date);
-           return fechaDate;
+            Date fechaDate = formato.parse(date);
+            return fechaDate;
 
         } catch (ParseException e) {
             throw new RuntimeException(e);
@@ -62,33 +62,46 @@ public class FlightController {
     }
 
 
-    @PostMapping (path = "/create")
-    public ResponseEntity<Void> create(@RequestBody @Valid FlightDTO flightDTO){
-        Flight flight = flightMapper.toEntity(flightDTO);
-        flightService.create(flight);
-
-        return  ResponseEntity.status(201).build();
+    @PostMapping(path = "/create")
+    public ResponseEntity<Void> create(@RequestBody @Valid FlightDTO flightDTO) {
+        try {
+            Flight flight = flightMapper.toEntity(flightDTO);
+            if (flightService.create(flight)) {
+                return ResponseEntity.status(201).build();
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PutMapping(path = "/{id}")
     public ResponseEntity<Void> update(@RequestBody @Valid FlightDTO flightDTO,
-                                       @PathVariable("id") String id){
+                                       @PathVariable("id") String id) {
         Flight flight = flightMapper.toEntity(flightDTO);
-        try{
-            flightService.update(flight, id);
-            return ResponseEntity.ok().build();
-        }catch (Exception e){
+        try {
+            if (flightService.update(flight, id)) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity <Void> delete(@PathVariable("id") String id){
-        try{
-            flightService.delete(id);
-            return  ResponseEntity.ok().build();
-        }catch (Exception e){
-            return  ResponseEntity.notFound().build();
+    public ResponseEntity<Void> delete(@PathVariable("id") String id) {
+        try {
+            if (
+                    flightService.delete(id)) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
         }
     }
 

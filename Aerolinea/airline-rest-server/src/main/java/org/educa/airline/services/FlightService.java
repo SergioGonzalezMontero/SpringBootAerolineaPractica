@@ -28,15 +28,15 @@ public class FlightService {
 
         return inMemoryFlightRepository.getFlight(id);
     }
-    public void create(Flight flight){
-        inMemoryFlightRepository.add(flight);
+    public boolean create(Flight flight){
+        return inMemoryFlightRepository.add(flight);
     }
-    public void update(Flight flight, String id) throws Exception {
-        inMemoryFlightRepository.updateFlight(id, flight);
+    public boolean update(Flight flight, String id) throws Exception {
+        return inMemoryFlightRepository.updateFlight(id, flight);
     }
 
-    public void delete(String id) throws Exception {
-        inMemoryFlightRepository.delete(id);
+    public boolean delete(String id) throws Exception {
+        return inMemoryFlightRepository.delete(id);
     }
 
 
