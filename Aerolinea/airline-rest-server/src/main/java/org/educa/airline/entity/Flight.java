@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+/**
+ * Clase que representa un vuelo.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

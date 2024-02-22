@@ -3,6 +3,9 @@ package org.educa.airline.dto;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
+/**
+ * DTO (Data Transfer Object) para representar un pasajero.
+ */
 @Data
 public class PassengerDTO {
     @NotNull

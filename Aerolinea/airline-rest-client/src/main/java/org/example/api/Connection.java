@@ -9,36 +9,53 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+/**
+ * Esta clase proporciona métodos para realizar solicitudes HTTP a una API.
+ * Contiene métodos para realizar solicitudes GET, POST, PUT y DELETE.
+ */
 public class Connection {
 
+    /**
+     * Realiza una solicitud GET a la URL especificada.
+     *
+     * @param url La URL a la que se realizará la solicitud GET.
+     * @return La respuesta de la solicitud.
+     * @throws Exception Si ocurre un error durante la solicitud.
+     */
     public String doGet(String url) throws Exception {
-        System.out.println("URL solicitada: " + url);
+        // Realiza la solicitud GET
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .GET()
                 .build();
 
         try (HttpClient client = HttpClient.newHttpClient()){
-            HttpResponse<String> respuesta = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(respuesta.body());
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            if (respuesta.statusCode() == 200) {
-                return respuesta.body();
-            } else if (respuesta.statusCode() == 404) {
+
+
+            // Verifica el código de estado de la respuesta y maneja los errores correspondientes
+            if (response.statusCode() == 200) {
+                return response.body();
+            } else if (response.statusCode() == 404) {
                 throw new NotFoundException();
-            } else if(respuesta.statusCode()== 400){
+            } else if(response.statusCode()== 400){
                 throw new BadRequestException();
-            }else {
-                throw new Exception("Error: " + respuesta.statusCode());
+            } else {
+                throw new Exception("Error: " + response.statusCode());
             }
-
         }
-
     }
 
+    /**
+     * Realiza una solicitud POST a la URL especificada con el cuerpo proporcionado.
+     *
+     * @param body El cuerpo de la solicitud POST.
+     * @param url La URL a la que se realizará la solicitud POST.
+     * @throws Exception Si ocurre un error durante la solicitud.
+     */
     public void doPost(String body, String url) throws Exception {
-        System.out.println("URL solicitada: " + url);
-        //url= "localhost:8080/flights/a2022-01-01?date=2022-01-01/passenger";
+        // Realiza la solicitud POST
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .POST(HttpRequest.BodyPublishers.ofString(body))
@@ -46,24 +63,33 @@ public class Connection {
                 .build();
 
         try (HttpClient client = HttpClient.newHttpClient()){
-            HttpResponse<String> respuesta = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(respuesta.body());
-            if(respuesta.statusCode()==201){
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+
+
+            // Verifica el código de estado de la respuesta y maneja los errores correspondientes
+            if(response.statusCode()==201){
                 System.out.println("Creado correctamente");
-            }else if(respuesta.statusCode()==409){
+            }else if(response.statusCode()==409){
                 throw new DuplicatedException();
-            }else if(respuesta.statusCode()==400){
+            }else if(response.statusCode()==400){
                 throw new BadRequestException();
             }else{
                 throw new RuntimeException();
             }
-
         }
-
     }
 
+    /**
+     * Realiza una solicitud PUT a la URL especificada con el cuerpo proporcionado.
+     *
+     * @param body El cuerpo de la solicitud PUT.
+     * @param url La URL a la que se realizará la solicitud PUT.
+     * @return La respuesta de la solicitud.
+     * @throws Exception Si ocurre un error durante la solicitud.
+     */
     public String doUpdate(String body, String url) throws Exception {
-        System.out.println("URL solicitada: " + url);
+        // Realiza la solicitud PUT
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .PUT(HttpRequest.BodyPublishers.ofString(body))
@@ -71,39 +97,47 @@ public class Connection {
                 .build();
 
         try (HttpClient client = HttpClient.newHttpClient()){
-            HttpResponse<String> respuesta = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(respuesta.body());
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            if (respuesta.statusCode() == 200) {
-                return respuesta.body();
-            } else if (respuesta.statusCode() == 404) {
+
+            // Verifica el código de estado de la respuesta y maneja los errores correspondientes
+            if (response.statusCode() == 200) {
+                return response.body();
+            } else if (response.statusCode() == 404) {
                 throw new NotFoundException();
             } else {
-                throw new Exception("Error: " + respuesta.statusCode());
+                throw new Exception("Error: " + response.statusCode());
             }
         }
-
     }
 
+    /**
+     * Realiza una solicitud DELETE a la URL especificada.
+     *
+     * @param url La URL a la que se realizará la solicitud DELETE.
+     * @return La respuesta de la solicitud.
+     * @throws Exception Si ocurre un error durante la solicitud.
+     */
     public String doDelete(String url) throws Exception {
-        System.out.println("URL solicitada: " + url);
+        // Realiza la solicitud DELETE
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .DELETE()
                 .build();
 
         try (HttpClient client = HttpClient.newHttpClient()){
-            HttpResponse<String> respuesta = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(respuesta.body());
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            if (respuesta.statusCode() == 200) {
-                return respuesta.body();
-            } else if (respuesta.statusCode() == 404) {
+
+
+            // Verifica el código de estado de la respuesta y maneja los errores correspondientes
+            if (response.statusCode() == 200) {
+                return response.body();
+            } else if (response.statusCode() == 404) {
                 throw new NotFoundException();
             } else {
-                throw new Exception("Error: " + respuesta.statusCode());
+                throw new Exception("Error: " + response.statusCode());
             }
         }
-
     }
 }

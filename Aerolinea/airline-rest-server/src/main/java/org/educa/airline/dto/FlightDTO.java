@@ -7,6 +7,9 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * DTO (Data Transfer Object) para representar un vuelo.
+ */
 @Data
 public class FlightDTO {
     @NotNull
