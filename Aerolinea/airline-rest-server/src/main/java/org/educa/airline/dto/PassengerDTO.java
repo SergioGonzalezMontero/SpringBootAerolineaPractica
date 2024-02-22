@@ -7,7 +7,6 @@ import lombok.Data;
 public class PassengerDTO {
     @NotNull
     @NotEmpty
-
     private String nif;
 
     @NotNull
@@ -24,7 +23,7 @@ public class PassengerDTO {
 
     @NotNull
     @NotEmpty
-
+    @Email
     private String email;
 
     @NotNull

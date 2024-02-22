@@ -22,4 +22,28 @@ public class ApiPassengerService extends AppiService{
         Gson gson = new Gson();
         return gson.fromJson(body, PassengerDTO.class);
     }
+
+    public  PassengerDTO updatePassengerOfFlight(PassengerDTO passengerDTO, String id, String nif){
+
+        Gson gson = new Gson();
+        String body = gson.toJson(passengerDTO);
+        try {
+            connection.doUpdate(body, URL +"/"+id+"/passenger/"+nif);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return  gson.fromJson(body, PassengerDTO.class);
+    }
+
+    public boolean deletePassangerOfFlight(PassengerDTO passengerDTO, String id, String nif){
+
+        Gson gson = new Gson();
+        String body = gson.toJson(passengerDTO);
+        try {
+            connection.doDelete(URL +"/"+id+"/passenger/"+nif);
+            return true;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

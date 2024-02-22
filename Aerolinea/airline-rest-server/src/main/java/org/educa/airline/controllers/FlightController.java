@@ -1,8 +1,9 @@
 package org.educa.airline.controllers;
 
-import jakarta.validation.Path;
 import jakarta.validation.Valid;
+import org.educa.airline.Exceptions.BadDateException;
 import org.educa.airline.dto.FlightDTO;
+
 import org.educa.airline.entity.Flight;
 import org.educa.airline.mappers.FlightMapper;
 import org.educa.airline.services.FlightService;
@@ -33,31 +34,38 @@ public class FlightController {
     public ResponseEntity<List<FlightDTO>> findAllFlight(@RequestParam(value = "ori") String origin, @RequestParam(value = "des") String destination) {
         List<FlightDTO> flightDTOs = flightMapper.toDTOs(
                 flightService.findAllFlight(origin, destination));
-        return ResponseEntity.ok(flightDTOs);
-    }
-
-    @GetMapping(path = "/{id}")
-    public ResponseEntity<FlightDTO> findFlightByID(@PathVariable("id") String id, @RequestParam(value = "date") String date) {
-        FlightDTO flightDTO = null;
-        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-        Date dateCasted = castStringDate(date, formato);
-        try {
-            flightDTO = flightMapper.toDTO(
-                    flightService.findFlightByIdDate(id, dateCasted));
-            return ResponseEntity.ok(flightDTO);
-        } catch (Exception e) {
-            System.err.println(e);
+        if(!flightDTOs.isEmpty()){
+            return ResponseEntity.ok(flightDTOs);
+        }else{
             return ResponseEntity.notFound().build();
         }
     }
 
-    private static Date castStringDate(String date, SimpleDateFormat formato) {
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<FlightDTO> findFlightByID(@PathVariable("id") String id, @RequestParam(value = "date") String date) {
+
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            Date dateCasted = castStringDate(date, formato);
+            Flight flight = flightService.findFlightByIdDate(id, dateCasted);
+            if(flight != null) {
+                return ResponseEntity.ok(flightMapper.toDTO(flight));
+            }else{
+                return ResponseEntity.notFound().build();
+            }
+        }catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    private Date castStringDate(String date, SimpleDateFormat formato) throws BadDateException {
         try {
             Date fechaDate = formato.parse(date);
             return fechaDate;
 
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            throw new BadDateException();
         }
     }
 
@@ -67,18 +75,20 @@ public class FlightController {
         try {
             Flight flight = flightMapper.toEntity(flightDTO);
             if (flightService.create(flight)) {
+                //creado
                 return ResponseEntity.status(201).build();
             } else {
-                return ResponseEntity.badRequest().build();
+                //duplicado
+                return ResponseEntity.status(409).build();
             }
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
-
+    /* Se estudió hacer el vuelo
     @PutMapping(path = "/{id}")
-    public ResponseEntity<Void> update(@RequestBody @Valid FlightDTO flightDTO,
-                                       @PathVariable("id") String id) {
+    public ResponseEntity<Void> update(@PathVariable("id") String id,
+                                       @RequestBody @Valid FlightDTO flightDTO) {
         Flight flight = flightMapper.toEntity(flightDTO);
         try {
             if (flightService.update(flight, id)) {
@@ -90,7 +100,7 @@ public class FlightController {
             return ResponseEntity.notFound().build();
         }
     }
-
+    */
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") String id) {
         try {
@@ -105,5 +115,16 @@ public class FlightController {
         }
     }
 
+    @GetMapping(path = "/allflights")
+    public ResponseEntity<List<FlightDTO>> getAllFlight(){
+        List<FlightDTO> flightDTOs = flightMapper.toDTOs(
+                flightService.findAllFlight());
+        if(!flightDTOs.isEmpty()){
+            return ResponseEntity.ok(flightDTOs);
+        }else{
+            return ResponseEntity.badRequest().build();
+        }
+
+    }
 
 }

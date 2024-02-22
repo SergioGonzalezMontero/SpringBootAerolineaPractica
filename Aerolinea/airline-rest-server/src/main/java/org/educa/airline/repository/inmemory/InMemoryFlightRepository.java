@@ -15,15 +15,6 @@ import java.util.stream.Collectors;
 public class InMemoryFlightRepository implements FlightRepository {
     private Map<String, Flight> flights = new HashMap<>();
 
-    public InMemoryFlightRepository() {
-        Flight flight = new Flight();
-        flight.setId("1-2024-01-12");
-        flight.setCode("1");
-        flight.setOrigin("Madrid");
-        flight.setDestination("Barcelona");
-        flight.setDate(new Date(2024-1990, 1, 12));
-        flights.put(flight.getId(), flight);
-    }
 
     @Override
     public List<Flight> list(String origin, String destination) {
@@ -75,5 +66,9 @@ public class InMemoryFlightRepository implements FlightRepository {
         } else {
             return false;
         }
+    }
+    // Método para listar todos los vuelos
+    public List<Flight> listAll() {
+        return flights.values().stream().collect(Collectors.toList());
     }
 }

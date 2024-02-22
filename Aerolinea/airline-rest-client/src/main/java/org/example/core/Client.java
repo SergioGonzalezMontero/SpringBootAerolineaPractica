@@ -53,6 +53,12 @@ public class Client {
                 case "3":
                     flightService.findflightCodeDate(scanner);
                     break;
+                case "4":
+                    flightService.deleteFlight(scanner);
+                    break;
+                case "5":
+                    flightService.findAll();
+                    break;
 
             }
         } while (!"0".equals(opt));
@@ -78,25 +84,11 @@ public class Client {
                     break;
                 }
                 case "3": {
-                    System.out.println("Actualiza un pasajero en un vuelo");
-                    System.out.println("Introduce el código del vuelo:");
-                    String codigo = scanner.nextLine();
-                    System.out.println("Introduce la fecha: (aaaa-mm-dd)");
-                    String fecha = scanner.nextLine();
-                    System.out.println("Introduce el NIE del pasajero");
-                    String nie = scanner.nextLine();
-                    //flightService.updatePassengerInFlight(codigo, fecha, nie);
+                    passengerService.updatePassangerInFlight(scanner);
                     break;
                 }
                 case "4": {
-                    System.out.println("Elimina un pasajero de un vuelo");
-                    System.out.println("Introduce el código del vuelo:");
-                    String codigo = scanner.nextLine();
-                    System.out.println("Introduce la fecha: (aaaa-mm-dd)");
-                    String fecha = scanner.nextLine();
-                    System.out.println("Introduce el NIE del pasajero");
-                    String nie = scanner.nextLine();
-                    //flightService.updatePassengerInFlight(codigo, fecha, nie);
+                    passengerService.deletePassenger(scanner);
                     break;
                 }
                 case "5": {
@@ -123,6 +115,8 @@ public class Client {
         System.out.println("1. Nuevo vuelo");
         System.out.println("2. Consulta vuelos por origen y destino");
         System.out.println("3. Consulta vuelo por id y fecha");
+        System.out.println("4. Elimina vuelo por id");
+        System.out.println("5. Mostrar todos los vuelos");
         System.out.println("Introduzca una opción");
     }
 

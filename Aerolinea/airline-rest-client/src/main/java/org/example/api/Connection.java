@@ -50,7 +50,7 @@ public class Connection {
             System.out.println(respuesta.body());
             if(respuesta.statusCode()==201){
                 System.out.println("Creado correctamente");
-            }else if(respuesta.statusCode()==412){
+            }else if(respuesta.statusCode()==409){
                 throw new DuplicatedException();
             }else if(respuesta.statusCode()==400){
                 throw new BadRequestException();

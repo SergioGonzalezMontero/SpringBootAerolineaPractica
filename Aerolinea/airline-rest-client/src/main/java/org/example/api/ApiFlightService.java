@@ -7,10 +7,10 @@ import java.util.Date;
 
 public class ApiFlightService extends AppiService{
     private final String URL = super.URL + "/flights";
-    public FlightDTO fingFlightOrigenDestiny(String origen, String destino) throws Exception {
+    public FlightDTO[] fingFlightOrigenDestiny(String origen, String destino) throws Exception {
         String body = connection.doGet(URL + "?ori="+origen+"&des="+destino);
         Gson gson = new Gson();
-        FlightDTO flightDTO = gson.fromJson(body, FlightDTO.class);
+        FlightDTO[] flightDTO = gson.fromJson(body, FlightDTO[].class);
         return flightDTO;
     }
     public void create(FlightDTO flightDTO) throws Exception {
@@ -25,5 +25,22 @@ public class ApiFlightService extends AppiService{
         Gson gson = new Gson();
         FlightDTO flightDTO = gson.fromJson(body, FlightDTO.class);
         return flightDTO;
+    }
+
+    public boolean delete(String id) {
+        try {
+            connection.doDelete(URL +"/"+id);
+            return true;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public FlightDTO[] findAll() throws Exception {
+
+            String body = connection.doGet(URL+"/allflights");
+            Gson gson = new Gson();
+            FlightDTO[] flightDTO = gson.fromJson(body, FlightDTO[].class);
+            return flightDTO;
+
     }
 }

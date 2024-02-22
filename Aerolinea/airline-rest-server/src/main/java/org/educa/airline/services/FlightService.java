@@ -21,9 +21,7 @@ public class FlightService {
         return inMemoryFlightRepository.list(origin,destination);
     }
 
-    ////////////////////////////////
-    ////////TODO EXCEPCION NOT FOUND
-    //////////////
+
     public Flight findFlightByIdDate(String id, Date date) throws Exception{
 
         return inMemoryFlightRepository.getFlight(id);
@@ -39,5 +37,11 @@ public class FlightService {
         return inMemoryFlightRepository.delete(id);
     }
 
+    public List<Flight> findAllFlight(){
+        return inMemoryFlightRepository.listAll();
+    }
 
+    public Boolean existFlight(String id){
+        return inMemoryFlightRepository.getFlight(id)!=null;
+    }
 }

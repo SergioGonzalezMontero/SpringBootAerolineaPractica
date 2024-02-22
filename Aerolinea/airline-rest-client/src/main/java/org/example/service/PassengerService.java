@@ -61,8 +61,8 @@ public class PassengerService {
         }
     }
 
-    public void checkPassengerOfFlignt(Scanner scanner) {
-        System.out.println("Consulta pasajero en vuelo");
+    public PassengerDTO checkPassengerOfFlignt(Scanner scanner) {
+
         System.out.println("Introduce el id del vuelo:");
         String id = scanner.nextLine();
         System.out.println("Introduce el NIF del pasajero");
@@ -71,6 +71,7 @@ public class PassengerService {
         try {
             PassengerDTO passengerDTO =apiPassengerService.findPassengerOfFlight(id, nif);
             System.out.println(passengerDTO);
+            return passengerDTO;
         } catch (BadRequestException e){
             System.out.println("Los parametros introducidos no son correctos");
         }catch (NotFoundException e) {
@@ -80,5 +81,99 @@ public class PassengerService {
         } catch (Exception e) {
             System.out.println("Error inesperado");
         }
+        return null;
+    }
+
+    public void updatePassangerInFlight(Scanner scanner){
+        System.out.println("Actualiza un pasajero en un vuelo");
+
+        PassengerDTO passengerDTO;
+        passengerDTO =checkPassengerOfFlignt(scanner);
+        if(passengerDTO!= null) {
+            String id = passengerDTO.getFlightId();
+
+            String nif = passengerDTO.getNif();
+
+
+            // Menú de opciones
+            System.out.println("¿Qué deseas modificar?");
+            System.out.println("1. Nombre");
+            System.out.println("2. Apellido");
+            System.out.println("3. Email");
+            System.out.println("4. Número de asiento");
+            System.out.println("5. Todo");
+            System.out.println("6. Volver sin modificar");
+
+            int opcion = scanner.nextInt();
+            scanner.nextLine(); // Consumir la nueva línea después de nextInt()
+
+
+            switch (opcion) {
+                case 1:
+                    System.out.println("Introduce el nuevo nombre:");
+                    String newName = scanner.nextLine();
+                    passengerDTO.setName(newName);
+                    break;
+                case 2:
+                    System.out.println("Introduce el nuevo apellido:");
+                    String newSurname = scanner.nextLine();
+                    passengerDTO.setSurname(newSurname);
+                    break;
+                case 3:
+                    System.out.println("Introduce el nuevo email:");
+                    String newEmail = scanner.nextLine();
+                    passengerDTO.setEmail(newEmail);
+                    break;
+                case 4:
+                    System.out.println("Introduce el nuevo número de asiento:");
+                    int newSeatNumber = scanner.nextInt();
+                    passengerDTO.setSeatNumber(newSeatNumber);
+                    break;
+
+                case 5:
+                    System.out.println("Introduce el nuevo nombre:");
+                    String nuevoNombre = scanner.nextLine();
+                    passengerDTO.setName(nuevoNombre);
+
+                    System.out.println("Introduce el nuevo apellido:");
+                    String nuevoApellido = scanner.nextLine();
+                    passengerDTO.setSurname(nuevoApellido);
+
+                    System.out.println("Introduce el nuevo email:");
+                    String nuevoEmail = scanner.nextLine();
+                    passengerDTO.setEmail(nuevoEmail);
+
+                    System.out.println("Introduce el nuevo número de asiento:");
+                    int nuevoNumeroAsiento = scanner.nextInt();
+                    passengerDTO.setSeatNumber(nuevoNumeroAsiento);
+                    break;
+                case 6:
+                    System.out.println("Volviendo sin modificar...");
+                    return; // Salir del método sin realizar ninguna modificación
+                default:
+                    System.out.println("Opción no válida");
+            }
+            apiPassengerService.updatePassengerOfFlight(passengerDTO,id,nif);
+        }else{
+            System.out.println("No se ha encontrado el pasajero en el vuelo");
+        }
+
+    }
+
+    public Boolean deletePassenger(Scanner scanner){
+
+
+        PassengerDTO passengerDTO = checkPassengerOfFlignt(scanner);
+        try {
+            apiPassengerService.deletePassangerOfFlight(passengerDTO, passengerDTO.getFlightId(), passengerDTO.getNif());
+            System.out.println("Pasajero eliminado correctamente");
+            return true;
+        }catch (Exception e){
+            System.out.println("Algo ha fallado, no se ha realizado la eliminación");
+        }
+
+        return false;
+
     }
 }
+
