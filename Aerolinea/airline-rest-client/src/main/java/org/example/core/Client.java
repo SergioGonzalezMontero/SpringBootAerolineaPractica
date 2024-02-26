@@ -2,6 +2,7 @@ package org.example.core;
 
 import org.example.service.FlightService;
 import org.example.service.PassengerService;
+import org.example.service.UserService;
 
 import java.util.Scanner;
 
@@ -11,9 +12,11 @@ import java.util.Scanner;
  */
 public class Client {
 
-    // Se crean instancias de los servicios de vuelo y pasajero
+    // Se crean instancias de los servicios de vuelo pasajero y usuario
     FlightService flightService = new FlightService();
     PassengerService passengerService = new PassengerService();
+
+    UserService userService = new UserService();
 
     /**
      * Método principal para ejecutar el cliente.
@@ -36,6 +39,10 @@ public class Client {
                     case "2":
                         // Se muestra el menú de pasajeros
                         menuPassenger(scanner);
+                        break;
+                    case "3":
+                        // Se muestra el menú de usuarios
+                        menuUser(scanner);
                         break;
                     case "0":
                         System.out.println("Gracias por usar la aplicación");
@@ -70,9 +77,6 @@ public class Client {
                     break;
                 case "4":
                     flightService.deleteFlight(scanner);
-                    break;
-                case "5":
-                    flightService.findAll();
                     break;
                 case "0":
                     System.out.println("Volviendo al menú principal...");
@@ -120,6 +124,34 @@ public class Client {
         } while (!"0".equals(opt));
     }
 
+    private void menuUser(Scanner scanner) throws Exception {
+        String opt;
+        do {
+            printMenuPassenger();
+            opt = scanner.nextLine();
+            // Se manejan las opciones del menú de pasajeros
+            switch (opt) {
+                case "1":
+                    userService.newUser(scanner);
+                    break;
+                case "2":
+                    userService.deleteUser(scanner);
+                    break;
+                case "3":
+                    userService.updateUser(scanner);
+                    break;
+                case "4":
+                    userService.findUser(scanner);
+                    break;
+                case "0":
+                    System.out.println("Volviendo al menú principal...");
+                    break;
+                default:
+                    System.out.println("Opción no válida");
+            }
+        } while (!"0".equals(opt));
+    }
+
     /**
      * Método para imprimir el menú principal.
      */
@@ -128,6 +160,7 @@ public class Client {
         System.out.println("Seleccione una opción:");
         System.out.println("1. Menú de vuelos");
         System.out.println("2. Menú de pasajeros");
+        System.out.println("3. Menú de pasajeros");
         System.out.println("0. Salir");
     }
 
@@ -156,6 +189,20 @@ public class Client {
         System.out.println("3. Actualizar información de un pasajero en un vuelo");
         System.out.println("4. Eliminar pasajero de un vuelo");
         System.out.println("5. Consultar todos los pasajeros de un vuelo");
+        System.out.println("0. Volver al menú principal");
+    }
+
+    /**
+     * Método para imprimir el menú de pasajeros.
+     */
+    private void printMenuUser() {
+        System.out.println("==== Menú de usuarios ====");
+        System.out.println("Seleccione una opción:");
+        System.out.println("1. Creacción usuario");
+        System.out.println("2. Modificación de usuario");
+        System.out.println("3. Eliminación de usuario");
+        System.out.println("4. Consulta de usuario");
+        System.out.println("5. Iniciar sesion" );
         System.out.println("0. Volver al menú principal");
     }
 }

@@ -29,6 +29,7 @@ public class PassengerService {
 
         // Comprueba si los datos introducidos son válidos
         if (tools.esTextoValido(id) && tools.esDNIValido(nif) && tools.esTextoValido(name) && tools.esTextoValido(surname) && tools.esTextoValido(email) && tools.esNumeroValido(seatNumber)) {
+
             int seat = Integer.parseInt(seatNumber);
             PassengerDTO passengerDTO = new PassengerDTO(nif, id, name, surname, email, seat);
             try {
