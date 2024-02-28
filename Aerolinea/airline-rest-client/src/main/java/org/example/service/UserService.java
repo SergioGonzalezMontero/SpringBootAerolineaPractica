@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.api.ApiUserService;
 import org.example.core.Client;
+import org.example.dto.FlightDTO;
 import org.example.dto.RoleDTO;
 import org.example.dto.UserDTO;
 import org.example.exception.NotFoundException;
@@ -31,34 +32,35 @@ public class UserService {
         String email = scanner.nextLine().trim().toUpperCase();
         System.out.println("¿Qué rol tendrá " + username + "?\n1. Admin\n2. Personal\n3. Usuario");
         String opcion = scanner.nextLine().trim().toUpperCase();
-        String rol = "";
+        RoleDTO rol = null;
         switch (opcion) {
             case "1":
                 System.out.println("Escogiste rol ADMIN");
-                rol = "ADMIN";
+                rol = new RoleDTO("ROLE_admin","admin","Es un administrador");
                 break;
             case "2":
                 System.out.println("Escogiste rol PERSONAL");
-                rol = "PERSONAL";
+                rol = new RoleDTO("ROLE_personal","personal","Es un personal");
                 break;
             case "3":
                 System.out.println("Escogiste rol USUARIO");
-                rol = "USUARIO";
+                rol = new RoleDTO("ROLE_usuario","usuario","Es un usuario");
                 break;
             default:
                 System.out.println("Opción inválida, no se creará el usuario");
                 return; // Salir del método si la opción no es válida
         }
-        if (!rol.isEmpty()) {
+        if (rol!=null) {
             try {
                 if (tools.esTextoValido(username) && tools.contrasenaValida(password)) {
                     List<RoleDTO> roles = new ArrayList<>();
                     // Lógica para verificar si el rol ya existe y añadirlo solo si no existe
-                    roles.add(new RoleDTO(rol, rol, rol));
+                    roles.add(rol);
                     UserDTO userDTO = new UserDTO(username, password, nif, name, surname, email, roles);
                     System.out.println("No olvide recordar su nombre y contraseña, el usuario se creará");
                     apiUserService.create(userDTO);
-                    System.out.println("Usuario creado exitosamente");
+                    System.out.println("Usuario creado exitosamente\nTe has conectado con el usuario "+userDTO.getUsername());
+                    Client.userLogged = userDTO;
                 } else {
                     System.out.println("Los parámetros introducidos no son válidos");
                 }
@@ -88,12 +90,13 @@ public class UserService {
     }
 
     public UserDTO findUser(Scanner scanner) {
-        System.out.println("Consulta usuario por correo");
-        System.out.println("Introduce el correo:");
-        String mail = scanner.nextLine().trim().toUpperCase();
-        if (tools.esTextoValido(mail)) {
+        System.out.println("Consulta usuario por nombre de usuario");
+        System.out.println("Introduce el nombre de usuario:");
+        String username = scanner.nextLine().trim().toUpperCase();
+        if (tools.esTextoValido(username)) {
             try {
-                UserDTO userDTO = apiUserService.findUser(mail);
+                UserDTO userDTO = apiUserService.findUser(username);
+                printUser(userDTO);
                 return userDTO;
             }catch (NotFoundException e) {
                 System.out.println("Usuario no encontrado");
@@ -172,12 +175,13 @@ public class UserService {
                 userDTO.setPassword(email);
                 break;
             case "7":
-                opcion ="";
+
+                RoleDTO rol = null;
                 boolean anadir= true;
                 System.out.println("¿1. Anadir \n2. eliminar rol?");
-                opcion = scanner.nextLine();
+                opcion = scanner.nextLine().toUpperCase().trim();
 
-                String rol = "";
+
                 switch (opcion) {
                     case "1":
                         System.out.println("Elegiste anadir rol");
@@ -198,30 +202,30 @@ public class UserService {
                     switch (opcion) {
                         case "1":
                             System.out.println("Escogiste rol ADMIN");
-                            rol = "ADMIN";
+                            rol = new RoleDTO("ROLE_admin","admin","Es un administrador");
                             break;
                         case "2":
                             System.out.println("Escogiste rol PERSONAL");
-                            rol = "PERSONAL";
+                            rol = new RoleDTO("ROLE_personal","personal","Es un personal");
                             break;
                         case "3":
                             System.out.println("Escogiste rol USUARIO");
-                            rol = "USUARIO";
+                            rol = new RoleDTO("ROLE_usuario","usuario","Es un usuario");
                             break;
                         default:
                             System.out.println("No escogiste una opción válida, no se hará el alta");
                     }
-                    if (!rol.isEmpty()) {
+                    if (rol != null) {
                         if(anadir){
-                            RoleDTO role = new RoleDTO(rol, rol, rol);
-                            if(userDTO.getRoles().contains(role.getRol())){
-                                userDTO.getRoles().add(role);
+
+                            if(!userDTO.getRoles().contains(rol)){
+                                userDTO.getRoles().add(rol);
                             }else{
-                                System.out.println("El usuarioo ya tiene ese rol");
+                                System.out.println("El usuario ya tiene ese rol");
                             }
 
                         }else{
-                            userDTO.getRoles().remove(new RoleDTO().getRol().equals(rol));
+                            userDTO.getRoles().remove(rol);
                         }
 
                     }
@@ -254,15 +258,17 @@ public class UserService {
 
 
     public UserDTO login(Scanner scanner) {
-        System.out.println("Introduce el mail de usuario: ");
-        String mail  = scanner.nextLine();
+        System.out.println("Introduce el username de usuario: ");
+        String username  = scanner.nextLine().toUpperCase().trim();
         System.out.println("Introduce el password: ");
-        String pass = scanner.nextLine();
-        if (tools.esTextoValido(mail)&&tools.esTextoValido(pass)) {
+        String pass = scanner.nextLine().toUpperCase().trim();
+        if (tools.esTextoValido(username)&&tools.esTextoValido(pass)) {
         try {
-            UserDTO userDTO = apiUserService.findUser(mail);
+            UserDTO userDTO = apiUserService.login(username, pass);
             if(userDTO!=null){
                 Client.userLogged = userDTO;
+            }else{
+                System.out.println("Usuario no encontrado");
             }
 
             return userDTO;
@@ -276,4 +282,15 @@ public class UserService {
     }
         return null;
     }
+    private void printUser(UserDTO userDTO) {
+        System.out.println("----------------------------");
+        System.out.println("Detalles del USUARIO:");
+        System.out.println("Username: " + userDTO.getUsername());
+        System.out.println("NIF: " + userDTO.getNif());
+        System.out.println("Nombre: " + userDTO.getName());
+        System.out.println("Apellido: " + userDTO.getSurname());
+        System.out.println("email: " + userDTO.getEmail());
+        System.out.println("----------------------------");
+    }
 }
+

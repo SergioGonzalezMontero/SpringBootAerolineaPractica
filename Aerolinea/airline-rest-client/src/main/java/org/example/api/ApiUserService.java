@@ -42,4 +42,11 @@ public class ApiUserService extends AppiService{
         Gson gson = new Gson();
         return gson.fromJson(body,UserDTO.class);
     }
+
+    public UserDTO login(String name,String pass) throws Exception {
+        String body = connection.doGet(URL + "/"+name,name,pass);
+        Gson gson = new Gson();
+        return gson.fromJson(body,UserDTO.class);
+    }
+
 }

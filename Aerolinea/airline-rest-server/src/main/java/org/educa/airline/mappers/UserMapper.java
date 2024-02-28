@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +24,6 @@ public class UserMapper {
     private final   SecurityUtil securityUtil;
     @Autowired
     UserMapper(SecurityUtil securityUtil){
-
         this.securityUtil = securityUtil;
     }
 
@@ -31,14 +34,14 @@ public class UserMapper {
      * @return Objeto Passenger resultante.
      */
 
-    public User toEntity(UserDTO userDTO) throws NoSuchAlgorithmException {
+    public User toEntity(UserDTO userDTO) throws NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, InvalidKeyException {
         User user = new User();
         user.setUsername(userDTO.getUsername());
         user.setPassword(securityUtil.createHash(userDTO.getPassword()));
-        user.setNif(userDTO.getNif());
+        user.setNif(securityUtil.crypt(userDTO.getNif()));
         user.setName(userDTO.getName());
         user.setSurname(userDTO.getSurname());
-        user.setEmail(userDTO.getEmail());
+        user.setEmail(securityUtil.crypt(userDTO.getEmail()));
         user.setRoles(userDTO.getRoles());
         return user;
     }
@@ -50,14 +53,14 @@ public class UserMapper {
      */
 
 
-    public UserDTO toDTO(User user)throws NullPointerException{
+    public UserDTO toDTO(User user) throws NullPointerException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException, InvalidKeyException {
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername(user.getUsername());
         userDTO.setPassword(user.getPassword());
-        userDTO.setNif(user.getNif());
+        userDTO.setNif(securityUtil.decrypt(user.getNif()));
         userDTO.setName(user.getName());
         userDTO.setSurname(user.getSurname());
-        userDTO.setEmail(user.getEmail());
+        userDTO.setEmail(securityUtil.decrypt(user.getEmail()));
         userDTO.setRoles(user.getRoles());
         return userDTO;
     }
@@ -67,7 +70,7 @@ public class UserMapper {
      * @param userList Lista de objetos user a convertir.
      * @return Lista de objetos PassengerDTO resultante.
      */
-    public List<UserDTO> toDTOs (List<User> userList){
+    public List<UserDTO> toDTOs (List<User> userList) throws IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException, InvalidKeyException {
         List<UserDTO> userDTOs = new ArrayList<>();
         for (User user: userList){
             UserDTO usertDTO = toDTO(user);

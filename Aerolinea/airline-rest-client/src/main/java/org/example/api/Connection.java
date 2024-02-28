@@ -1,5 +1,7 @@
 package org.example.api;
 
+import org.example.core.Client;
+import org.example.dto.UserDTO;
 import org.example.exception.BadRequestException;
 import org.example.exception.DuplicatedException;
 import org.example.exception.NotFoundException;
@@ -8,6 +10,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Base64;
 
 /**
  * Esta clase proporciona métodos para realizar solicitudes HTTP a una API.
@@ -27,12 +30,11 @@ public class Connection {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .GET()
+                .header("Authorization", getBasicAuthenticationHeader(Client.userLogged.getUsername(), Client.userLogged.getPassword()))
                 .build();
 
         try (HttpClient client = HttpClient.newHttpClient()){
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-
 
             // Verifica el código de estado de la respuesta y maneja los errores correspondientes
             if (response.statusCode() == 200) {
@@ -46,6 +48,39 @@ public class Connection {
             }
         }
     }
+
+    /**
+     * Realiza una solicitud GET a la URL especificada.
+     *
+     * @param url La URL a la que se realizará la solicitud GET.
+     * @return La respuesta de la solicitud.
+     * @throws Exception Si ocurre un error durante la solicitud.
+     */
+    public String doGet(String url, String username, String password) throws Exception {
+        // Realiza la solicitud GET
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .header("Authorization", getBasicAuthenticationHeader(username, password))
+                .build();
+
+        try (HttpClient client = HttpClient.newHttpClient()){
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            // Verifica el código de estado de la respuesta y maneja los errores correspondientes
+            if (response.statusCode() == 200) {
+                return response.body();
+            } else if (response.statusCode() == 404) {
+                throw new NotFoundException();
+            } else if(response.statusCode()== 400){
+                throw new BadRequestException();
+            } else {
+                throw new Exception("Error: " + response.statusCode());
+            }
+        }
+    }
+
+
 
     /**
      * Realiza una solicitud POST a la URL especificada con el cuerpo proporcionado.
@@ -94,6 +129,7 @@ public class Connection {
                 .uri(URI.create(url))
                 .PUT(HttpRequest.BodyPublishers.ofString(body))
                 .header("Content-Type", "application/json")
+                .header("Authorization", getBasicAuthenticationHeader(Client.userLogged.getUsername(), Client.userLogged.getPassword()))
                 .build();
 
         try (HttpClient client = HttpClient.newHttpClient()){
@@ -123,6 +159,7 @@ public class Connection {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .DELETE()
+                .header("Authorization", getBasicAuthenticationHeader(Client.userLogged.getUsername(), Client.userLogged.getPassword()))
                 .build();
 
         try (HttpClient client = HttpClient.newHttpClient()){
@@ -140,4 +177,5 @@ public class Connection {
             }
         }
     }
+    private static String getBasicAuthenticationHeader(String username, String password) {        String valueToEncode = username + ":" + password;        return "Basic " + Base64.getEncoder().encodeToString(valueToEncode.getBytes());    }
 }

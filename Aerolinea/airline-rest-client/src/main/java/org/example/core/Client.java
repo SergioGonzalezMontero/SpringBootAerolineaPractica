@@ -129,7 +129,7 @@ public class Client {
     private void menuUser(Scanner scanner) throws Exception {
         String opt;
         do {
-            printMenuPassenger();
+            printMenuUser();
             opt = scanner.nextLine();
             // Se manejan las opciones del menú de pasajeros
             switch (opt) {
@@ -164,7 +164,7 @@ public class Client {
         System.out.println("Seleccione una opción:");
         System.out.println("1. Menú de vuelos");
         System.out.println("2. Menú de pasajeros");
-        System.out.println("3. Menú de pasajeros");
+        System.out.println("3. Menú de usuarios");
         System.out.println("0. Salir");
     }
 
