@@ -16,7 +16,9 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public User getUser(String username) {
+
         return users.get(username);
+
     }
 
     @Override
@@ -26,6 +28,7 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public void createUser(User user) {
+        System.out.println(user);
         users.put(user.getUsername(), user);
     }
 

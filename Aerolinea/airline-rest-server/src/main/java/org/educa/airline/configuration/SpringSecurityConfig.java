@@ -45,7 +45,8 @@ public class SpringSecurityConfig {
         http.cors(AbstractHttpConfigurer::disable).csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(withDefaults()).authorizeHttpRequests(
                         request -> request.requestMatchers("/user").anonymous()
-                                .requestMatchers(HttpMethod.DELETE,"/user/{username}").anonymous()
+                                .requestMatchers("/user/{username}").hasAnyRole("admin")
+                                .anyRequest().authenticated()
                                 /*.requestMatchers(HttpMethod.GET,"/user/{username}").hasAnyRole("admin","usuario")
                                 .requestMatchers(HttpMethod.DELETE,"/user/{username}").hasAnyRole("admin","usuario")
 

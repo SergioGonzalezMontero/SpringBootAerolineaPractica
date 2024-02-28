@@ -1,13 +1,14 @@
 package org.educa.airline.mappers;
 
 
-import org.educa.airline.dto.FlightDTO;
 import org.educa.airline.dto.UserDTO;
-import org.educa.airline.entity.Flight;
 import org.educa.airline.entity.User;
+import org.educa.airline.security.SecurityUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,13 @@ import java.util.List;
  */
 @Component
 public class UserMapper {
+    private final   SecurityUtil securityUtil;
+    @Autowired
+    UserMapper(SecurityUtil securityUtil){
+
+        this.securityUtil = securityUtil;
+    }
+
 
     /**
      * Convierte un objeto PassengerDTO a un objeto Passenger.
@@ -23,10 +31,10 @@ public class UserMapper {
      * @return Objeto Passenger resultante.
      */
 
-    public User toEntity(UserDTO userDTO) {
+    public User toEntity(UserDTO userDTO) throws NoSuchAlgorithmException {
         User user = new User();
         user.setUsername(userDTO.getUsername());
-        user.setPassword(userDTO.getPassword());
+        user.setPassword(securityUtil.createHash(userDTO.getPassword()));
         user.setNif(userDTO.getNif());
         user.setName(userDTO.getName());
         user.setSurname(userDTO.getSurname());

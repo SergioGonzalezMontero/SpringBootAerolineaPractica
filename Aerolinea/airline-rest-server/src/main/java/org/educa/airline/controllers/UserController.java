@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.security.NoSuchAlgorithmException;
+
 
 /**
  * Controlador para gestionar los pasajeros en vuelos.
@@ -47,12 +49,16 @@ public class UserController {
      */
     @PostMapping(path = "")
     public ResponseEntity<Void> create(@RequestBody @Valid UserDTO userDTO) throws NotExistUser {
-        User user = userMapper.toEntity(userDTO);
-
-        if (userService.create(user)) {
-            return ResponseEntity.status(201).build(); // Si se crea correctamente, devuelve 201 Created
-        } else {
-            return ResponseEntity.status(409).build(); // Si ya existe un pasajero con ese DNI en el vuelo, devuelve 409 Conflict
+        User user = null;
+        try {
+            user = userMapper.toEntity(userDTO);
+            if (userService.create(user)) {
+                return ResponseEntity.status(201).build(); // Si se crea correctamente, devuelve 201 Created
+            } else {
+                return ResponseEntity.status(409).build(); // Si ya existe un pasajero con ese DNI en el vuelo, devuelve 409 Conflict
+            }
+        } catch (NoSuchAlgorithmException e) {
+            return ResponseEntity.notFound().build();
         }
 
     }
@@ -94,10 +100,12 @@ public class UserController {
     @PutMapping(path = "/{username}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable("username") String username, @RequestBody UserDTO userDTO) {
 
-        User user = userMapper.toEntity(userDTO);
+        User user = null;
+
 
         if (!username.isBlank()) {
             try {
+                user = userMapper.toEntity(userDTO);
                 // Intenta actualizar los detalles del pasajero en el vuelo dado
                 if (userService.update(user, username)) {
 
@@ -106,6 +114,8 @@ public class UserController {
                 } else {
                     return ResponseEntity.notFound().build(); // Si el pasajero no existe en el vuelo, devuelve 404 Not Found
                 }
+            } catch (NoSuchAlgorithmException e) {
+                return ResponseEntity.badRequest().build();
             } catch (Exception e) {
 
                 return ResponseEntity.badRequest().build(); // Si ocurre algún otro error, devuelve 400 Bad Request
@@ -121,8 +131,8 @@ public class UserController {
      * @param username del usuario.
      * @return ResponseEntity con el resultado de la operación.
      */
-    @DeleteMapping("/{username}")
-    public ResponseEntity<Void> deleteUser(@PathVariable("username") String username) {
+    @DeleteMapping(path = "/{username}")
+    public ResponseEntity<Void> deleteUser(@Valid @PathVariable("username") String username) {
 
         try {
             if (userService.delete(username)) {
