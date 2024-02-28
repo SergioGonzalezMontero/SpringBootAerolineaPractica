@@ -2,7 +2,7 @@ package org.educa.airline.configuration;
 
 import lombok.Getter;
 
-import org.educa.airline.services.CryptService;
+import org.educa.airline.services.SecurityService;
 
 import org.educa.airline.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +23,12 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SpringSecurityConfig {
 
     private final UserService userService;
-    private final CryptService cryptService;
+    private final SecurityService securityService;
 
     @Autowired
-    public SpringSecurityConfig(UserService userService, CryptService cryptService) {
+    public SpringSecurityConfig(UserService userService, SecurityService securityService) {
         this.userService = userService;
-        this.cryptService = cryptService;
+        this.securityService = securityService;
     }
 
     @Autowired
@@ -36,25 +36,31 @@ public class SpringSecurityConfig {
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
 
-    public CryptService passwordEncoder() {
-        return cryptService;
+    public SecurityService passwordEncoder() {
+        return securityService;
     }
 
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(AbstractHttpConfigurer::disable).csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(withDefaults()).authorizeHttpRequests(
-                        request -> request.requestMatchers("/user").anonymous())/*
-                                .requestMatchers()
+                        request -> request.requestMatchers("/user").anonymous()
+                                .requestMatchers(HttpMethod.DELETE,"/user/{username}").anonymous()
+                                /*.requestMatchers(HttpMethod.GET,"/user/{username}").hasAnyRole("admin","usuario")
+                                .requestMatchers(HttpMethod.DELETE,"/user/{username}").hasAnyRole("admin","usuario")
 
+                                .requestMatchers("/user/{username}").authenticated()
 
+                                .requestMatchers(HttpMethod.PUT,"/user/{username}").hasRole("admin")
 
-                        request.requestMatchers("/crypt/crypt").anonymous()
-                                .requestMatchers(HttpMethod.GET, "/crypt/test").anonymous() //esto es una prueba para comprobar el acceso discriminado por method GET
-                                .requestMatchers("/crypt/decrypt").hasAnyRole("USER")
-                                .requestMatchers("/crypt/hash").hasRole("USER")
-                                .requestMatchers(HttpMethod.POST, "/crypt/test").hasAnyRole("USER") //esto es una prueba para comprobar el acceso discriminado por method POST
-                                .anyRequest().authenticated())*/;
+                                .requestMatchers(HttpMethod.GET,"/flights").authenticated()
+                                .requestMatchers(HttpMethod.GET,"/flights/{id}").authenticated()
+                                .requestMatchers("flights/{id}/passenger").hasRole("personal")
+                                .requestMatchers(HttpMethod.GET,"flights/{id}/passenger/{nif}").hasRole("personal")
+                                .requestMatchers(HttpMethod.PUT,"flights/{id}/passenger/{nif}").hasRole("personal")
+                                .requestMatchers(HttpMethod.DELETE,"flights/{id}/passenger/{nif}").hasRole("personal")
+                                .requestMatchers("flights/{id}/passengers}").hasRole("personal")*/);
+
         return http.build();
     }
 

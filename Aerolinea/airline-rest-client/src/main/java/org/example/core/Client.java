@@ -1,5 +1,6 @@
 package org.example.core;
 
+import org.example.dto.UserDTO;
 import org.example.service.FlightService;
 import org.example.service.PassengerService;
 import org.example.service.UserService;
@@ -11,6 +12,7 @@ import java.util.Scanner;
  * Proporciona un menú interactivo para acceder a diferentes funcionalidades.
  */
 public class Client {
+    public static UserDTO userLogged;
 
     // Se crean instancias de los servicios de vuelo pasajero y usuario
     FlightService flightService = new FlightService();
@@ -143,6 +145,8 @@ public class Client {
                 case "4":
                     userService.findUser(scanner);
                     break;
+                case "5":
+                    userService.login(scanner);
                 case "0":
                     System.out.println("Volviendo al menú principal...");
                     break;

@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.api.ApiUserService;
+import org.example.core.Client;
 import org.example.dto.RoleDTO;
 import org.example.dto.UserDTO;
 import org.example.exception.NotFoundException;
@@ -87,12 +88,12 @@ public class UserService {
     }
 
     public UserDTO findUser(Scanner scanner) {
-        System.out.println("Consulta usuario por nombre");
-        System.out.println("Introduce el nombre:");
-        String name = scanner.nextLine().trim().toUpperCase();
-        if (tools.esTextoValido(name)) {
+        System.out.println("Consulta usuario por correo");
+        System.out.println("Introduce el correo:");
+        String mail = scanner.nextLine().trim().toUpperCase();
+        if (tools.esTextoValido(mail)) {
             try {
-                UserDTO userDTO = apiUserService.findUser(name);
+                UserDTO userDTO = apiUserService.findUser(mail);
                 return userDTO;
             }catch (NotFoundException e) {
                 System.out.println("Usuario no encontrado");
@@ -252,4 +253,27 @@ public class UserService {
     }
 
 
+    public UserDTO login(Scanner scanner) {
+        System.out.println("Introduce el mail de usuario: ");
+        String mail  = scanner.nextLine();
+        System.out.println("Introduce el password: ");
+        String pass = scanner.nextLine();
+        if (tools.esTextoValido(mail)&&tools.esTextoValido(pass)) {
+        try {
+            UserDTO userDTO = apiUserService.findUser(mail);
+            if(userDTO!=null){
+                Client.userLogged = userDTO;
+            }
+
+            return userDTO;
+        }catch (NotFoundException e) {
+            System.out.println("Usuario no encontrado");
+        } catch (RuntimeException e) {
+            System.out.println("El server no está disponible");
+        } catch (Exception e) {
+            System.out.println("Error inesperado");
+        }
+    }
+        return null;
+    }
 }

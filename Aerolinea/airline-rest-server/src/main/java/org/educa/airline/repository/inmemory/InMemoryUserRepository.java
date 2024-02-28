@@ -15,8 +15,8 @@ public class InMemoryUserRepository implements UserRepository {
     private final Map<String, User> users = new HashMap<>();
 
     @Override
-    public User getUser(String email) {
-        return users.get(email);
+    public User getUser(String username) {
+        return users.get(username);
     }
 
     @Override
@@ -30,9 +30,8 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public boolean deleteUser(String username) {
+    public void deleteUser(String username) {
         users.remove(username);
-        return true;
     }
 
     @Override

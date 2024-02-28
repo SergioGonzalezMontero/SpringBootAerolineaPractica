@@ -4,12 +4,14 @@ package org.educa.airline.controllers;
 import jakarta.validation.Valid;
 import org.educa.airline.Exceptions.NotExistUser;
 import org.educa.airline.dto.UserDTO;
+
 import org.educa.airline.entity.User;
 import org.educa.airline.mappers.UserMapper;
 import org.educa.airline.services.UserService;
-import org.educa.airline.tools.Tools;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 
 
@@ -25,6 +27,7 @@ public class UserController {
 
     /**
      * Constructor del controlador.
+     *
      * @param userService Servicio para la gestión de pasajeros.
      * @param userMapper  Mapeador de pasajeros.
      */
@@ -61,21 +64,23 @@ public class UserController {
      * @param username ID del usuario.
      * @return ResponseEntity con los detalles del pasajero si existe.
      */
-    @GetMapping(path = "/{username}")
-    public Boolean existUser(@PathVariable("username") String username) {
-
+    @GetMapping(path = "/exists/{username}")
+    public ResponseEntity<Void> existUser(@PathVariable("username") String username) {
         // Intenta encontrar el pasajero en el vuelo dado
-        return userService.exitPassenger(username);
-
-
+        if (userService.exitUser(username)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @GetMapping(path = "/{email}")
-    public ResponseEntity<UserDTO> findUser(@PathVariable("email") String email) {
-
-
-        return ResponseEntity.ok(userMapper.toDTO(userService.findUser(email)));
-
+    @GetMapping(path = "/{username}")
+    public ResponseEntity<UserDTO> findUser(@PathVariable("username") String username) {
+        try {
+            return ResponseEntity.ok(userMapper.toDTO(userService.findUser(username)));
+        } catch (NullPointerException e) {
+            return ResponseEntity.notFound().build();
+        }
 
     }
 
@@ -90,17 +95,19 @@ public class UserController {
     public ResponseEntity<UserDTO> updateUser(@PathVariable("username") String username, @RequestBody UserDTO userDTO) {
 
         User user = userMapper.toEntity(userDTO);
-        // Verifica si el DNI del pasajero es válido
-        if (!username.isEmpty()) {
+
+        if (!username.isBlank()) {
             try {
                 // Intenta actualizar los detalles del pasajero en el vuelo dado
-                if (userService.update(user, username, user.getNif())) {
+                if (userService.update(user, username)) {
+
                     // Si se actualiza correctamente, devuelve los detalles actualizados del usuario
-                    return ResponseEntity.ok(userMapper.toDTO(userService.findUser(user.getEmail())));
+                    return ResponseEntity.ok(userMapper.toDTO(user));
                 } else {
                     return ResponseEntity.notFound().build(); // Si el pasajero no existe en el vuelo, devuelve 404 Not Found
                 }
             } catch (Exception e) {
+
                 return ResponseEntity.badRequest().build(); // Si ocurre algún otro error, devuelve 400 Bad Request
             }
         } else {
@@ -111,21 +118,23 @@ public class UserController {
     /**
      * Elimina un pasajero de un vuelo.
      *
-     * @param id  ID del vuelo.
-     * @param nif DNI del pasajero.
+     * @param username del usuario.
      * @return ResponseEntity con el resultado de la operación.
      */
-    @DeleteMapping(path = "/{username}")
-    public ResponseEntity<Void> deleteUser(@PathVariable("username") String id, @PathVariable("nif") String nif) {
+    @DeleteMapping("/{username}")
+    public ResponseEntity<Void> deleteUser(@PathVariable("username") String username) {
 
-
-        // Intenta eliminar al pasajero del vuelo
-        if (userService.delete(id, nif)) {
-            return ResponseEntity.ok().build(); // Si se elimina correctamente, devuelve 200 OK
+        try {
+            if (userService.delete(username)) {
+                return ResponseEntity.ok().build(); // Si se elimina correctamente, devuelve 200 OK
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(403).build();
         }
-
         return ResponseEntity.badRequest().build(); // Si ocurre algún otro error, devuelve 400 Bad Request
+
     }
+
 }
 
 

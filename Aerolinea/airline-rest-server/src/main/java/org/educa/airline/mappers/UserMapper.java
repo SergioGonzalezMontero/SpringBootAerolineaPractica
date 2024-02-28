@@ -42,15 +42,15 @@ public class UserMapper {
      */
 
 
-    public UserDTO toDTO(User user){
+    public UserDTO toDTO(User user)throws NullPointerException{
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername(user.getUsername());
         userDTO.setPassword(user.getPassword());
-        userDTO.setNif(userDTO.getNif());
-        userDTO.setName(userDTO.getName());
-        userDTO.setSurname(userDTO.getSurname());
-        userDTO.setEmail(userDTO.getEmail());
-        userDTO.setRoles(userDTO.getRoles());
+        userDTO.setNif(user.getNif());
+        userDTO.setName(user.getName());
+        userDTO.setSurname(user.getSurname());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setRoles(user.getRoles());
         return userDTO;
     }
 

@@ -13,7 +13,7 @@ public interface UserRepository {
 
     void createUser(User user);
 
-    boolean deleteUser(String username);
+    void deleteUser(String username);
 
     void updateUser(User user);
 

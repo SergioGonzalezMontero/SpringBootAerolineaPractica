@@ -13,11 +13,11 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 @Service
-public class CryptService implements PasswordEncoder {
+public class SecurityService implements PasswordEncoder {
     private final SecurityUtil securityUtil;
 
     @Autowired
-    public CryptService(SecurityUtil securityUtil) {
+    public SecurityService(SecurityUtil securityUtil) {
         this.securityUtil = securityUtil;
     }
 

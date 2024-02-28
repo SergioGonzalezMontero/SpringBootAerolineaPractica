@@ -5,7 +5,7 @@ import jakarta.validation.Valid;
 import org.educa.airline.dto.CryptDTO;
 import org.educa.airline.entity.CryptEntity;
 import org.educa.airline.mappers.CryptMapper;
-import org.educa.airline.services.CryptService;
+import org.educa.airline.services.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -22,13 +22,13 @@ import java.security.NoSuchAlgorithmException;
 @RestController
 @RequestMapping(path = "/crypt")
 public class CryptController {
-    private final CryptService cryptService;
+    private final SecurityService securityService;
     private final CryptMapper cryptMapper;
 
     @Autowired
-    public CryptController(CryptService cryptService,
+    public CryptController(SecurityService securityService,
                            CryptMapper cryptMapper) {
-        this.cryptService = cryptService;
+        this.securityService = securityService;
         this.cryptMapper = cryptMapper;
     }
 
@@ -39,7 +39,7 @@ public class CryptController {
         CryptEntity entity = cryptMapper.toEntity(cryptDTO);
         String mesage;
         try {
-            mesage = cryptService.crypt(entity.getMessage());
+            mesage = securityService.crypt(entity.getMessage());
         } catch (IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException | NoSuchAlgorithmException |
                  InvalidKeyException e) {
             return ResponseEntity.status(500).build();
@@ -53,7 +53,7 @@ public class CryptController {
         CryptEntity entity = cryptMapper.toEntity(cryptDTO);
         String mesage;
         try {
-            mesage = cryptService.decrypt(entity.getMessage());
+            mesage = securityService.decrypt(entity.getMessage());
         } catch (IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException | NoSuchAlgorithmException |
                  InvalidKeyException e) {
             return ResponseEntity.status(500).build();
@@ -71,7 +71,7 @@ public class CryptController {
         CryptEntity entity = cryptMapper.toEntity(cryptDTO);
         String mesage;
         try {
-            mesage = cryptService.hash(entity.getMessage());
+            mesage = securityService.hash(entity.getMessage());
         } catch (NoSuchAlgorithmException e) {
             return ResponseEntity.status(500).build();
         }
