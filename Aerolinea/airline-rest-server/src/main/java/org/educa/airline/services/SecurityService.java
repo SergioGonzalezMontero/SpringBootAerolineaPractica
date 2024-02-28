@@ -38,7 +38,7 @@ public class SecurityService implements PasswordEncoder {
         try {
             return hash(rawPassword.toString());
         } catch (Exception e) {
-            System.err.println(e);
+           // System.err.println(e);
         }
         return null;
     }
@@ -51,7 +51,7 @@ public class SecurityService implements PasswordEncoder {
                 find = true;
             }
         } catch (Exception e) {
-            System.err.println(e);
+            //System.err.println(e);
         }
         return find;
     }

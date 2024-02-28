@@ -34,26 +34,32 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean update(User user, String username) throws Exception {
-        if (inMemoryUserRepository.existUser(username)) {
-            if (user.getUsername().equals(username)) {
-                inMemoryUserRepository.updateUser(user);
-                return true;
-            } else {
-                if (!inMemoryUserRepository.existUser(user.getUsername())) {
-                    delete(username);
-                    create(user);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetail = (UserDetails) auth.getPrincipal();
+        if (userDetail.getUsername().equals(username) || userDetail.getAuthorities().contains(new Role("ROLE_admin", "admin", "Es un administrador"))) {
+            if (inMemoryUserRepository.existUser(username)) {
+                if (user.getUsername().equals(username)) {
+                    inMemoryUserRepository.updateUser(user);
                     return true;
                 } else {
-                    return false;
+                    if (!inMemoryUserRepository.existUser(user.getUsername())) {
+                        delete(username);
+                        create(user);
+                        return true;
+                    } else {
+                        return false;
+                    }
                 }
+            } else {
+                return false;
             }
-        } else {
+        }else{
+            System.out.println("No ha pasado la autentificacion");
             return false;
         }
     }
 
     public boolean delete(String username) throws Exception {
-
        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
        UserDetails userDetail = (UserDetails) auth.getPrincipal();
         if (userDetail.getUsername().equals(username) || userDetail.getAuthorities().contains(new Role("ROLE_admin", "admin", "Es un administrador"))) {
@@ -78,7 +84,16 @@ public class UserService implements UserDetailsService {
     }
 
     public User findUser(String username) {
-        return inMemoryUserRepository.getUser(username);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetail = (UserDetails) auth.getPrincipal();
+        if (userDetail.getUsername().equals(username)
+                || userDetail.getAuthorities().contains(new Role("ROLE_admin", "admin", "Es un administrador"))
+                ||userDetail.getAuthorities().contains(new Role("ROLE_personal", "personal", "Es un personal"))) {
+            return inMemoryUserRepository.getUser(username);
+        }else{
+            return null;
+        }
+
     }
 
     @Override

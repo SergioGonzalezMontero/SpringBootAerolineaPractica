@@ -49,15 +49,16 @@ public class SpringSecurityConfig {
 
                                 .requestMatchers(HttpMethod.GET,"/user/{username}").hasAnyRole("admin","usuario")
                                 .requestMatchers(HttpMethod.DELETE,"/user/{username}").hasAnyRole("admin","usuario")
-                                .requestMatchers("/user/{username}").authenticated()
                                 .requestMatchers(HttpMethod.PUT,"/user/{username}").hasAnyRole("admin","usuario")
-                                .requestMatchers(HttpMethod.GET,"/flights").authenticated()
-                                .requestMatchers(HttpMethod.GET,"/flights/{id}").authenticated()
-                                .requestMatchers("flights/{id}/passenger").hasRole("personal")
-                                .requestMatchers(HttpMethod.GET,"flights/{id}/passenger/{nif}").hasRole("personal")
-                                .requestMatchers(HttpMethod.PUT,"flights/{id}/passenger/{nif}").hasRole("personal")
-                                .requestMatchers(HttpMethod.DELETE,"flights/{id}/passenger/{nif}").hasRole("personal")
-                                .requestMatchers("flights/{id}/passengers}").hasRole("personal")
+                                .requestMatchers(HttpMethod.POST,"/flights/create").hasRole("admin")
+                                .requestMatchers(HttpMethod.DELETE,"/flights/{id}").hasRole("admin")
+                                .requestMatchers("/flights").authenticated()
+                                .requestMatchers(HttpMethod.GET, "/flights/{id}").authenticated()
+                                .requestMatchers("/flights/{id}/passenger").hasRole("personal")
+                                .requestMatchers(HttpMethod.GET,"/flights/{id}/passenger/{nif}").hasRole("personal")
+                                .requestMatchers(HttpMethod.PUT,"/flights/{id}/passenger/{nif}").hasRole("personal")
+                                .requestMatchers(HttpMethod.DELETE,"/flights/{id}/passenger/{nif}").hasRole("personal")
+                                .requestMatchers("/flights/{id}/passengers}").hasRole("personal")
                                 .anyRequest().authenticated());
 
         return http.build();

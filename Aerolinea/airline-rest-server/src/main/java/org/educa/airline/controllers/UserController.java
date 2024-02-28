@@ -56,10 +56,15 @@ public class UserController {
         User user = null;
         try {
             user = userMapper.toEntity(userDTO);
-            if (userService.create(user)) {
-                return ResponseEntity.status(201).build(); // Si se crea correctamente, devuelve 201 Created
-            } else {
-                return ResponseEntity.status(409).build(); // Si ya existe un pasajero con ese DNI en el vuelo, devuelve 409 Conflict
+            if(!userService.exitUser(user.getUsername())) {
+                if (userService.create(user)) {
+                    return ResponseEntity.status(201).build(); // Si se crea correctamente, devuelve 201 Created
+                } else {
+                    return ResponseEntity.status(409).build(); // Si ya existe un pasajero con ese DNI en el vuelo, devuelve 409 Conflict
+                }
+            }else{
+                System.out.println("usuario duplicado no se crea");
+                return ResponseEntity.status(409).build();
             }
         } catch (NoSuchAlgorithmException e) {
             return ResponseEntity.notFound().build();
@@ -95,18 +100,16 @@ public class UserController {
     @GetMapping(path = "/{username}")
     public ResponseEntity<UserDTO> findUser(@PathVariable("username") String username) {
         try {
-            return ResponseEntity.ok(userMapper.toDTO(userService.findUser(username)));
+            if(ResponseEntity.ok(userMapper.toDTO(userService.findUser(username)))!=null){
+                return ResponseEntity.ok(userMapper.toDTO(userService.findUser(username)));
+            }else{
+                return ResponseEntity.notFound().build();
+            }
+
         } catch (NullPointerException e) {
             return ResponseEntity.notFound().build();
-        } catch (IllegalBlockSizeException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchPaddingException e) {
-            throw new RuntimeException(e);
-        } catch (BadPaddingException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        } catch (InvalidKeyException e) {
+        } catch (IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException | NoSuchAlgorithmException |
+                 InvalidKeyException e) {
             throw new RuntimeException(e);
         }
 
