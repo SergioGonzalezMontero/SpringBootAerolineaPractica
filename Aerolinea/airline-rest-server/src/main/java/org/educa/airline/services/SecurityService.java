@@ -38,7 +38,11 @@ public class SecurityService implements PasswordEncoder {
         try {
             return hash(rawPassword.toString());
         } catch (Exception e) {
-           // System.err.println(e);
+<<<<<<< HEAD
+            // System.err.println(e);
+=======
+            System.err.println(e);
+>>>>>>> parent of 017d3d4 (repasar autorizacion en pasajeros)
         }
         return null;
     }
@@ -51,7 +55,7 @@ public class SecurityService implements PasswordEncoder {
                 find = true;
             }
         } catch (Exception e) {
-            //System.err.println(e);
+            System.err.println(e);
         }
         return find;
     }

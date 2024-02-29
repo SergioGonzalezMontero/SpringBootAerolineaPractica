@@ -1,10 +1,10 @@
 package org.educa.airline.services;
 
 
-import org.educa.airline.Exceptions.NotExistUser;
 import org.educa.airline.entity.Role;
 import org.educa.airline.entity.User;
-
+import org.educa.airline.exceptions.NotExistUser;
+import org.educa.airline.exceptions.WhitOutPermissException;
 import org.educa.airline.repository.inmemory.InMemoryUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -34,34 +34,37 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean update(User user, String username) throws Exception {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetail = (UserDetails) auth.getPrincipal();
-        if (userDetail.getUsername().equals(username) || userDetail.getAuthorities().contains(new Role("ROLE_admin", "admin", "Es un administrador"))) {
-            if (inMemoryUserRepository.existUser(username)) {
-                if (user.getUsername().equals(username)) {
-                    inMemoryUserRepository.updateUser(user);
+        if (inMemoryUserRepository.existUser(username)) {
+            if (user.getUsername().equals(username)) {
+                inMemoryUserRepository.updateUser(user);
+                return true;
+            } else {
+                if (!inMemoryUserRepository.existUser(user.getUsername())) {
+                    delete(username);
+                    create(user);
                     return true;
                 } else {
-                    if (!inMemoryUserRepository.existUser(user.getUsername())) {
-                        delete(username);
-                        create(user);
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return false;
                 }
-            } else {
-                return false;
             }
-        }else{
-            System.out.println("No ha pasado la autentificacion");
+        } else {
+<<<<<<< HEAD
+            throw new WhitOutPermissException();
+=======
             return false;
+>>>>>>> parent of 017d3d4 (repasar autorizacion en pasajeros)
         }
     }
 
     public boolean delete(String username) throws Exception {
+<<<<<<< HEAD
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetail = (UserDetails) auth.getPrincipal();
+=======
+
        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
        UserDetails userDetail = (UserDetails) auth.getPrincipal();
+>>>>>>> parent of 017d3d4 (repasar autorizacion en pasajeros)
         if (userDetail.getUsername().equals(username) || userDetail.getAuthorities().contains(new Role("ROLE_admin", "admin", "Es un administrador"))) {
             if (inMemoryUserRepository.existUser(username)) {
                 inMemoryUserRepository.deleteUser(username);
@@ -70,7 +73,7 @@ public class UserService implements UserDetailsService {
                 return false;
             }
         } else {
-           throw new Exception();
+            throw new WhitOutPermissException();
         }
     }
 
@@ -83,17 +86,22 @@ public class UserService implements UserDetailsService {
         return inMemoryUserRepository.existUser(username);
     }
 
-    public User findUser(String username) {
+<<<<<<< HEAD
+    public User findUser(String username) throws WhitOutPermissException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetail = (UserDetails) auth.getPrincipal();
         if (userDetail.getUsername().equals(username)
                 || userDetail.getAuthorities().contains(new Role("ROLE_admin", "admin", "Es un administrador"))
-                ||userDetail.getAuthorities().contains(new Role("ROLE_personal", "personal", "Es un personal"))) {
+                || userDetail.getAuthorities().contains(new Role("ROLE_personal", "personal", "Es un personal"))) {
             return inMemoryUserRepository.getUser(username);
-        }else{
-            return null;
+        } else {
+            throw new WhitOutPermissException();
         }
 
+=======
+    public User findUser(String username) {
+        return inMemoryUserRepository.getUser(username);
+>>>>>>> parent of 017d3d4 (repasar autorizacion en pasajeros)
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.example.api;
 
 import com.google.gson.Gson;
 import org.example.dto.PassengerDTO;
+
 /**
  * Esta clase proporciona métodos para interactuar con la API de pasajeros.
  */
@@ -12,6 +13,7 @@ public class ApiPassengerService extends AppiService {
 
     /**
      * Crea un nuevo pasajero para un vuelo específico.
+     *
      * @param passengerDTO El objeto PassengerDTO que representa al pasajero a crear.
      * @throws Exception Si ocurre un error durante la solicitud.
      */
@@ -25,6 +27,7 @@ public class ApiPassengerService extends AppiService {
 
     /**
      * Busca todos los pasajeros de un vuelo específico.
+     *
      * @param id El ID del vuelo.
      * @return Un arreglo de objetos PassengerDTO que representan todos los pasajeros del vuelo.
      * @throws Exception Si ocurre un error durante la solicitud.
@@ -39,7 +42,8 @@ public class ApiPassengerService extends AppiService {
 
     /**
      * Busca un pasajero específico de un vuelo.
-     * @param id El ID del vuelo.
+     *
+     * @param id  El ID del vuelo.
      * @param nif El NIF del pasajero.
      * @return El objeto PassengerDTO que representa al pasajero buscado.
      * @throws Exception Si ocurre un error durante la solicitud.
@@ -54,41 +58,37 @@ public class ApiPassengerService extends AppiService {
 
     /**
      * Actualiza los detalles de un pasajero en un vuelo.
+     *
      * @param passengerDTO El objeto PassengerDTO con los detalles actualizados del pasajero.
-     * @param id El ID del vuelo.
-     * @param nif El NIF del pasajero.
+     * @param id           El ID del vuelo.
+     * @param nif          El NIF del pasajero.
      * @return El objeto PassengerDTO actualizado.
      */
-    public PassengerDTO updatePassengerOfFlight(PassengerDTO passengerDTO, String id, String nif) {
+    public PassengerDTO updatePassengerOfFlight(PassengerDTO passengerDTO, String id, String nif) throws Exception {
         Gson gson = new Gson();
         String body = gson.toJson(passengerDTO);
-        try {
-            // Realiza una solicitud PUT a la API para actualizar los detalles del pasajero en el vuelo
-            connection.doUpdate(body, URL + "/" + id + "/passenger/" + nif);
-        } catch (Exception e) {
-            // Lanza una excepción RuntimeException si ocurre un error durante la solicitud
-            throw new RuntimeException(e);
-        }
+
+        // Realiza una solicitud PUT a la API para actualizar los detalles del pasajero en el vuelo
+        connection.doUpdate(body, URL + "/" + id + "/passenger/" + nif);
+
         return gson.fromJson(body, PassengerDTO.class);
     }
 
     /**
      * Elimina un pasajero de un vuelo.
+     *
      * @param passengerDTO El objeto PassengerDTO que representa al pasajero a eliminar.
-     * @param id El ID del vuelo.
-     * @param nif El NIF del pasajero.
+     * @param id           El ID del vuelo.
+     * @param nif          El NIF del pasajero.
      * @return true si el pasajero se eliminó correctamente, false en caso contrario.
      */
-    public boolean deletePassangerOfFlight(PassengerDTO passengerDTO, String id, String nif) {
+    public boolean deletePassangerOfFlight(PassengerDTO passengerDTO, String id, String nif) throws Exception {
         Gson gson = new Gson();
         String body = gson.toJson(passengerDTO);
-        try {
-            // Realiza una solicitud DELETE a la API para eliminar el pasajero del vuelo
-            connection.doDelete(URL + "/" + id + "/passenger/" + nif);
-            return true;
-        } catch (Exception e) {
-            // Lanza una excepción RuntimeException si ocurre un error durante la solicitud
-            throw new RuntimeException(e);
-        }
+
+        // Realiza una solicitud DELETE a la API para eliminar el pasajero del vuelo
+        connection.doDelete(URL + "/" + id + "/passenger/" + nif);
+        return true;
+
     }
 }

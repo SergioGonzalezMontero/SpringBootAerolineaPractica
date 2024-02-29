@@ -1,17 +1,20 @@
 package org.example.service;
-import java.util.Arrays;
-import java.util.Scanner;
 
 import org.example.api.ApiPassengerService;
 import org.example.dto.PassengerDTO;
 import org.example.exception.BadRequestException;
 import org.example.exception.NotFoundException;
+import org.example.exception.NotLoggedCorretlyException;
+import org.example.exception.NotPermissException;
 import org.example.tools.Tools;
+
+import java.util.Scanner;
 
 public class PassengerService {
 
     private final ApiPassengerService apiPassengerService = new ApiPassengerService();
-    private  final Tools tools = new Tools();
+    private final Tools tools = new Tools();
+
     public void newPassenger(Scanner scanner) {
         System.out.println("Asocia un pasajero a un vuelo");
         System.out.println("Introduce el id del vuelo:");
@@ -40,6 +43,10 @@ public class PassengerService {
                 System.out.println("Los parametros introducidos no son correctos");
             } catch (NotFoundException e) {
                 System.out.println("Vuelo no encontrado");
+            } catch (NotPermissException e) {
+                System.out.println("Usuario sin permisos");
+            } catch (NotLoggedCorretlyException e) {
+                System.out.println("Usuario no logueado");
             } catch (RuntimeException e) {
                 System.out.println("El server no está disponible");
             } catch (Exception e) {
@@ -65,7 +72,7 @@ public class PassengerService {
             try {
                 // Llama al servicio para buscar los pasajeros del vuelo
                 PassengerDTO[] passengerDTOs = apiPassengerService.findPassengersOfFlight(id);
-                for(PassengerDTO passenger : passengerDTOs){
+                for (PassengerDTO passenger : passengerDTOs) {
                     printPassenger(passenger);
                 }
 
@@ -73,6 +80,10 @@ public class PassengerService {
                 System.out.println("Los parametros introducidos no son correctos");
             } catch (NotFoundException e) {
                 System.out.println("Vuelo no encontrado");
+            } catch (NotPermissException e) {
+                System.out.println("Usuario sin permisos");
+            } catch (NotLoggedCorretlyException e) {
+                System.out.println("Usuario no logueado");
             } catch (RuntimeException e) {
                 System.out.println("El server no está disponible");
             } catch (Exception e) {
@@ -106,6 +117,10 @@ public class PassengerService {
                 System.out.println("Los parametros introducidos no son correctos");
             } catch (NotFoundException e) {
                 System.out.println("Vuelo no encontrado");
+            } catch (NotPermissException e) {
+                System.out.println("Usuario sin permisos");
+            } catch (NotLoggedCorretlyException e) {
+                System.out.println("Usuario no logueado");
             } catch (RuntimeException e) {
                 System.out.println("El server no está disponible");
             } catch (Exception e) {
@@ -197,19 +212,25 @@ public class PassengerService {
                     System.out.println("Opción no válida");
             }
             try {
-                if(tools.confirmarAccion(scanner)) {
+                if (tools.confirmarAccion(scanner)) {
                     // Llama al servicio para actualizar el pasajero en el vuelo
                     apiPassengerService.updatePassengerOfFlight(passengerDTO, id, nif);
                     System.out.println("Pasajero actualizado");
                     printPassenger(passengerDTO);
-                }else{
+                } else {
                     System.out.println("No se confirmó la actualización");
                 }
+            } catch (NotPermissException e) {
+                System.out.println("Usuario sin permisos");
+            } catch (NotLoggedCorretlyException e) {
+                System.out.println("Usuario no logueado");
+            } catch (NotFoundException e) {
+                System.out.println("Usuario no encontrado");
             } catch (RuntimeException e) {
-            System.out.println("El server no está disponible");
-        } catch (Exception e) {
-            System.out.println("Error inesperado");
-        }
+                System.out.println("El server no está disponible");
+            } catch (Exception e) {
+                System.out.println("Error inesperado");
+            }
         } else {
             System.out.println("No se ha encontrado el pasajero en el vuelo");
         }
@@ -225,20 +246,27 @@ public class PassengerService {
         PassengerDTO passengerDTO = checkPassengerOfFlignt(scanner);
         if (passengerDTO != null) {
             try {
-                if(tools.confirmarAccion(scanner)){
+                if (tools.confirmarAccion(scanner)) {
                     // Llama al servicio para eliminar el pasajero del vuelo
                     apiPassengerService.deletePassangerOfFlight(passengerDTO, passengerDTO.getFlightId(), passengerDTO.getNif());
                     System.out.println("Pasajero eliminado correctamente");
-                return true;
-                }else{
+                    return true;
+                } else {
                     System.out.println("No se confirmó la eliminación");
                 }
+            } catch (NotPermissException e) {
+                System.out.println("Usuario sin permisos");
+            } catch (NotLoggedCorretlyException e) {
+                System.out.println("Usuario no logueado");
+            } catch (NotFoundException e) {
+                System.out.println("Usuario no encontrado");
             } catch (Exception e) {
                 System.out.println("Algo ha fallado, no se ha realizado la eliminación");
             }
         }
         return false;
     }
+
     private void printPassenger(PassengerDTO passenger) {
         System.out.println("--------------------------");
         System.out.println("NIF: " + passenger.getNif());

@@ -1,14 +1,13 @@
 package org.educa.airline.mappers;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 
 import org.educa.airline.dto.FlightDTO;
 import org.educa.airline.entity.Flight;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,6 +18,7 @@ public class FlightMapper {
 
     /**
      * Convierte un objeto FlightDTO a un objeto Flight.
+     *
      * @param flightDTO Objeto FlightDTO a convertir.
      * @return Objeto Flight resultante.
      */
@@ -34,10 +34,11 @@ public class FlightMapper {
 
     /**
      * Convierte un objeto Flight a un objeto FlightDTO.
+     *
      * @param flight Objeto Flight a convertir.
      * @return Objeto FlightDTO resultante.
      */
-    public FlightDTO toDTO(Flight flight){
+    public FlightDTO toDTO(Flight flight) {
         FlightDTO flightDTO = new FlightDTO();
         flightDTO.setCode(flight.getCode());
         flightDTO.setOrigin(flight.getOrigin());
@@ -49,12 +50,13 @@ public class FlightMapper {
 
     /**
      * Convierte una lista de objetos Flight a una lista de objetos FlightDTO.
+     *
      * @param flightList Lista de objetos Flight a convertir.
      * @return Lista de objetos FlightDTO resultante.
      */
-    public List<FlightDTO> toDTOs (List<Flight> flightList){
+    public List<FlightDTO> toDTOs(List<Flight> flightList) {
         List<FlightDTO> flightDTOs = new ArrayList<>();
-        for (Flight flight: flightList){
+        for (Flight flight : flightList) {
             FlightDTO flightDTO = toDTO(flight);
             flightDTOs.add(flightDTO);
         }
@@ -63,10 +65,11 @@ public class FlightMapper {
 
     /**
      * Convierte una fecha en formato String a un objeto Date.
+     *
      * @param dateString Fecha en formato String.
      * @return Objeto Date resultante.
      */
-    public Date stringToDate(String dateString){
+    public Date stringToDate(String dateString) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
             return dateFormat.parse(dateString);
@@ -78,10 +81,11 @@ public class FlightMapper {
 
     /**
      * Convierte un objeto Date a una cadena en formato String.
+     *
      * @param date Objeto Date a convertir.
      * @return Cadena en formato String resultante.
      */
-    public String dateToString(Date date){
+    public String dateToString(Date date) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return dateFormat.format(date);
     }

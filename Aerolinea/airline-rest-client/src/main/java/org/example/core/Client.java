@@ -203,10 +203,10 @@ public class Client {
         System.out.println("==== Menú de usuarios ====");
         System.out.println("Seleccione una opción:");
         System.out.println("1. Creacción usuario");
-        System.out.println("2. Eliminación de usuario");
-        System.out.println("3. Modificación de usuario");
+        System.out.println("2. Modificación de usuario");
+        System.out.println("3. Eliminación de usuario");
         System.out.println("4. Consulta de usuario");
-        System.out.println("5. Iniciar sesion" );
+        System.out.println("5. Iniciar sesion");
         System.out.println("0. Volver al menú principal");
     }
 }

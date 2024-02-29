@@ -3,9 +3,10 @@ package org.example.service;
 
 import org.example.api.ApiFlightService;
 import org.example.dto.FlightDTO;
-
 import org.example.exception.BadRequestException;
 import org.example.exception.NotFoundException;
+import org.example.exception.NotLoggedCorretlyException;
+import org.example.exception.NotPermissException;
 import org.example.tools.Tools;
 
 import java.util.Scanner;
@@ -41,6 +42,10 @@ public class FlightService {
                 System.out.println("Los parametros introducidos no son correctos");
             } catch (NotFoundException e) {
                 System.out.println("Vuelo no encontrado");
+            } catch (NotPermissException e) {
+                System.out.println("Usuario sin permisos");
+            } catch (NotLoggedCorretlyException e) {
+                System.out.println("Usuario no logueado");
             } catch (RuntimeException e) {
                 System.out.println("El server no está disponible");
             } catch (Exception e) {
@@ -73,8 +78,12 @@ public class FlightService {
                 return flightDTO;
             } catch (BadRequestException e) {
                 System.out.println("La fecha no tiene un formato válido");
+            } catch (NotPermissException e) {
+                System.out.println("Usuario sin permisos");
+            } catch (NotLoggedCorretlyException e) {
+                System.out.println("Usuario no logueado");
             } catch (NotFoundException e) {
-                System.out.println("Vuelo no encontrado");
+                System.out.println("Usuario no encontrado");
             } catch (RuntimeException e) {
                 System.out.println("El server no está disponible");
             } catch (Exception e) {
@@ -114,8 +123,12 @@ public class FlightService {
                 printFlight(flightDTO);
             } catch (BadRequestException e) {
                 System.out.println("La fecha no tiene un formato válido");
+            } catch (NotPermissException e) {
+                System.out.println("Usuario sin permisos");
+            } catch (NotLoggedCorretlyException e) {
+                System.out.println("Usuario no logueado");
             } catch (NotFoundException e) {
-                System.out.println("Vuelo no encontrado");
+                System.out.println("Usuario no encontrado");
             } catch (RuntimeException e) {
                 System.out.println("El server no está disponible");
             } catch (Exception e) {
@@ -142,6 +155,12 @@ public class FlightService {
                 System.out.println("No se ha confirmado la eliminación");
             }
 
+        } catch (NotPermissException e) {
+            System.out.println("Usuario sin permisos");
+        } catch (NotLoggedCorretlyException e) {
+            System.out.println("Usuario no logueado");
+        } catch (NotFoundException e) {
+            System.out.println("Usuario no encontrado");
         } catch (Exception e) {
             System.out.println("No se ha realizado la eliminación");
         }
@@ -162,6 +181,10 @@ public class FlightService {
             System.out.println("No hay vuelos disponibles");
         } catch (NotFoundException e) {
             System.out.println("Vuelos no encontrado");
+        } catch (NotPermissException e) {
+            System.out.println("Usuario sin permisos");
+        } catch (NotLoggedCorretlyException e) {
+            System.out.println("Usuario no logueado");
         } catch (RuntimeException e) {
             System.out.println("El server no está disponible");
         } catch (Exception e) {

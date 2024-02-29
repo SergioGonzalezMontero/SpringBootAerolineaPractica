@@ -1,10 +1,9 @@
 package org.educa.airline.services;
 
-import org.educa.airline.Exceptions.NotExistFlight;
-import org.educa.airline.Exceptions.NotExistPassenger;
 import org.educa.airline.entity.Flight;
 import org.educa.airline.entity.Passenger;
-import org.educa.airline.repository.inmemory.InMemoryFlightRepository;
+import org.educa.airline.exceptions.NotExistFlight;
+import org.educa.airline.exceptions.NotExistPassenger;
 import org.educa.airline.repository.inmemory.InMemoryPassengerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,14 +44,14 @@ public class PassengerService {
     }
 
     public boolean delete(String id, String nif) throws NotExistFlight, NotExistPassenger {
-        if (flightService.existFlight(id) ) {
-            if(exitPassenger(id, nif)){
+        if (flightService.existFlight(id)) {
+            if (exitPassenger(id, nif)) {
                 return inMemoryPassengerRepository.deletePassenger(id, nif);
-            }else{
-                throw  new NotExistPassenger();
+            } else {
+                throw new NotExistPassenger();
             }
 
-        }else{
+        } else {
             throw new NotExistFlight();
         }
     }

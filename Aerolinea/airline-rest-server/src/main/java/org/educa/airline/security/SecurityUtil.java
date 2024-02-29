@@ -34,7 +34,7 @@ public class SecurityUtil {
         byte[] mensajeByteCifrado = aesCipher.doFinal(message.getBytes());
         byte[] mensajeByteCifradoBase64 = Base64.getEncoder().encode(mensajeByteCifrado);
         String mensajeCifrado = new String(mensajeByteCifradoBase64);
-        System.out.println("Mensaje cifrado: "+mensajeCifrado);
+        System.out.println("Mensaje cifrado: " + mensajeCifrado);
         return mensajeCifrado;
 
     }
@@ -48,7 +48,7 @@ public class SecurityUtil {
         System.out.println("Descifrando mensaje");
         byte[] mensajeByte = Base64.getDecoder().decode(mensajeCifrado.getBytes());
         String mensajeDescifrado = new String(aesCipher.doFinal(mensajeByte));
-        System.out.println("mensaje descifrado: "+mensajeDescifrado);
+        System.out.println("mensaje descifrado: " + mensajeDescifrado);
         return mensajeDescifrado;
     }
 

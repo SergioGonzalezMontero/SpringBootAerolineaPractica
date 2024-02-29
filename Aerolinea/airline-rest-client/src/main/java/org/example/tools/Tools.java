@@ -99,7 +99,8 @@ public class Tools {
         String respuesta = scanner.nextLine().trim().toUpperCase();
         return respuesta.equals("S");
     }
-    public boolean contrasenaValida(String pass){
+
+    public boolean contrasenaValida(String pass) {
         return pass.length() >= 4;
     }
 }

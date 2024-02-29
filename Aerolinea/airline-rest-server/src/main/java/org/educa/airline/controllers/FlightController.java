@@ -1,9 +1,9 @@
 package org.educa.airline.controllers;
 
 import jakarta.validation.Valid;
-import org.educa.airline.Exceptions.BadDateException;
 import org.educa.airline.dto.FlightDTO;
 import org.educa.airline.entity.Flight;
+import org.educa.airline.exceptions.BadDateException;
 import org.educa.airline.mappers.FlightMapper;
 import org.educa.airline.services.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +27,9 @@ public class FlightController {
 
     /**
      * Constructor del controlador.
+     *
      * @param flightService Servicio de vuelos.
-     * @param flightMapper Mapeador de vuelos.
+     * @param flightMapper  Mapeador de vuelos.
      */
     @Autowired
     public FlightController(FlightService flightService,
@@ -39,24 +40,26 @@ public class FlightController {
 
     /**
      * Busca todos los vuelos con un origen y destino específicos.
-     * @param origin Origen del vuelo.
+     *
+     * @param origin      Origen del vuelo.
      * @param destination Destino del vuelo.
      * @return ResponseEntity con la lista de vuelos encontrados.
      */
-    @GetMapping(path = "")
+    @GetMapping()
     public ResponseEntity<List<FlightDTO>> findAllFlight(@RequestParam(value = "ori") String origin, @RequestParam(value = "des") String destination) {
         List<FlightDTO> flightDTOs = flightMapper.toDTOs(
                 flightService.findAllFlight(origin, destination));
-        if(!flightDTOs.isEmpty()){
+        if (!flightDTOs.isEmpty()) {
             return ResponseEntity.ok(flightDTOs); // Si se encuentran vuelos, se devuelve una lista de FlightDTO
-        }else{
+        } else {
             return ResponseEntity.notFound().build(); // Si no se encuentran vuelos, se devuelve un código 404 Not Found
         }
     }
 
     /**
      * Busca un vuelo por su ID en una fecha específica.
-     * @param id ID del vuelo.
+     *
+     * @param id   ID del vuelo.
      * @param date Fecha de búsqueda.
      * @return ResponseEntity con el vuelo encontrado.
      */
@@ -68,19 +71,20 @@ public class FlightController {
         try {
             Date dateCasted = castStringDate(date, formato); // Convierte la fecha de String a Date
             Flight flight = flightService.findFlightByIdDate(id, dateCasted); // Busca el vuelo por ID y fecha
-            if(flight != null) {
+            if (flight != null) {
                 return ResponseEntity.ok(flightMapper.toDTO(flight)); // Si se encuentra el vuelo, se devuelve como FlightDTO
-            }else{
+            } else {
                 return ResponseEntity.notFound().build(); // Si no se encuentra el vuelo, se devuelve un código 404 Not Found
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build(); // Si ocurre un error en el formato de la fecha, se devuelve un código 400 Bad Request
         }
     }
 
     /**
      * Método privado para convertir una fecha de String a Date.
-     * @param date Fecha en formato String.
+     *
+     * @param date    Fecha en formato String.
      * @param formato Formato de la fecha.
      * @return Objeto Date.
      * @throws BadDateException Excepción si la fecha es inválida.
@@ -97,6 +101,7 @@ public class FlightController {
 
     /**
      * Crea un nuevo vuelo.
+     *
      * @param flightDTO Datos del vuelo a crear.
      * @return ResponseEntity con el resultado de la operación.
      */
@@ -136,6 +141,7 @@ public class FlightController {
 
     /**
      * Elimina un vuelo por su ID.
+     *
      * @param id ID del vuelo a eliminar.
      * @return ResponseEntity con el resultado de la operación.
      */
@@ -157,15 +163,16 @@ public class FlightController {
 
     /**
      * Obtiene todos los vuelos.
+     *
      * @return ResponseEntity con la lista de vuelos encontrados.
      */
     @GetMapping(path = "/allflights")
-    public ResponseEntity<List<FlightDTO>> getAllFlight(){
+    public ResponseEntity<List<FlightDTO>> getAllFlight() {
         List<FlightDTO> flightDTOs = flightMapper.toDTOs(
                 flightService.findAllFlight());
-        if(!flightDTOs.isEmpty()){
+        if (!flightDTOs.isEmpty()) {
             return ResponseEntity.ok(flightDTOs); // Si se encuentran vuelos, se devuelve una lista de FlightDTO
-        }else{
+        } else {
             return ResponseEntity.badRequest().build(); // Si no se encuentran vuelos, se devuelve un código 400 Bad Request
         }
 

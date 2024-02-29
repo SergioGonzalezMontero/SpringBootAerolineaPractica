@@ -16,10 +16,11 @@ public class LuggageMapper {
 
     /**
      * Convierte un objeto LuggageDTO a un objeto Luggage.
+     *
      * @param luggageDTO Objeto LuggageDTO a convertir.
      * @return Objeto Luggage resultante.
      */
-    public Luggage toEntity(LuggageDTO luggageDTO){
+    public Luggage toEntity(LuggageDTO luggageDTO) {
         Luggage luggage = new Luggage();
         luggage.setId(luggageDTO.getId());
         luggage.setNif(luggageDTO.getNif());
@@ -30,10 +31,11 @@ public class LuggageMapper {
 
     /**
      * Convierte un objeto Luggage a un objeto LuggageDTO.
+     *
      * @param luggage Objeto Luggage a convertir.
      * @return Objeto LuggageDTO resultante.
      */
-    public LuggageDTO toDTO(Luggage luggage){
+    public LuggageDTO toDTO(Luggage luggage) {
         LuggageDTO luggageDTO = new LuggageDTO();
         luggageDTO.setId(luggage.getId());
         luggageDTO.setNif(luggage.getNif());
@@ -44,12 +46,13 @@ public class LuggageMapper {
 
     /**
      * Convierte una lista de objetos Luggage a una lista de objetos LuggageDTO.
+     *
      * @param luggageList Lista de objetos Luggage a convertir.
      * @return Lista de objetos LuggageDTO resultante.
      */
-    public List<LuggageDTO> toDTOs(List<Luggage> luggageList){
+    public List<LuggageDTO> toDTOs(List<Luggage> luggageList) {
         List<LuggageDTO> luggageDTOs = new ArrayList<>();
-        for(Luggage luggage: luggageList){
+        for (Luggage luggage : luggageList) {
             LuggageDTO luggageDTO = toDTO(luggage);
             luggageDTOs.add(luggageDTO);
         }

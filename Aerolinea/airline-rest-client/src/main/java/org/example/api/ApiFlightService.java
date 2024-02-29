@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import org.example.dto.FlightDTO;
 
 
-
 /**
  * Esta clase proporciona métodos para interactuar con la API de vuelos.
  */
@@ -14,7 +13,8 @@ public class ApiFlightService extends AppiService {
 
     /**
      * Busca vuelos por origen y destino.
-     * @param origen Origen del vuelo.
+     *
+     * @param origen  Origen del vuelo.
      * @param destino Destino del vuelo.
      * @return Un arreglo de objetos FlightDTO que coinciden con el origen y destino especificados.
      * @throws Exception Si ocurre un error durante la solicitud.
@@ -30,6 +30,7 @@ public class ApiFlightService extends AppiService {
 
     /**
      * Crea un nuevo vuelo.
+     *
      * @param flightDTO El objeto FlightDTO que representa el vuelo a crear.
      * @throws Exception Si ocurre un error durante la solicitud.
      */
@@ -43,6 +44,7 @@ public class ApiFlightService extends AppiService {
 
     /**
      * Busca un vuelo por código y fecha.
+     *
      * @param code El código del vuelo.
      * @param date La fecha del vuelo.
      * @return El objeto FlightDTO que corresponde al código y fecha especificados.
@@ -59,22 +61,21 @@ public class ApiFlightService extends AppiService {
 
     /**
      * Elimina un vuelo por su ID.
+     *
      * @param id El ID del vuelo a eliminar.
      * @return true si el vuelo se eliminó correctamente, false en caso contrario.
      */
-    public boolean delete(String id) {
-        try {
-            // Realiza una solicitud DELETE a la API para eliminar el vuelo
-            connection.doDelete(URL + "/" + id);
-            return true;
-        } catch (Exception e) {
-            // Lanza una excepción RuntimeException si ocurre un error durante la solicitud
-            throw new RuntimeException(e);
-        }
+    public boolean delete(String id) throws Exception {
+
+        // Realiza una solicitud DELETE a la API para eliminar el vuelo
+        connection.doDelete(URL + "/" + id);
+        return true;
+
     }
 
     /**
      * Obtiene todos los vuelos.
+     *
      * @return Un arreglo de objetos FlightDTO que representan todos los vuelos disponibles.
      * @throws Exception Si ocurre un error durante la solicitud.
      */

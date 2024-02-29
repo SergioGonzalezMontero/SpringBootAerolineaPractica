@@ -4,12 +4,11 @@ import org.educa.airline.entity.Flight;
 import org.educa.airline.repository.FlightRepository;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 /**
  * Repositorio en memoria para vuelos.
  */
@@ -21,7 +20,8 @@ public class InMemoryFlightRepository implements FlightRepository {
 
     /**
      * Obtiene una lista de vuelos filtrada por origen y destino.
-     * @param origin Origen del vuelo.
+     *
+     * @param origin      Origen del vuelo.
      * @param destination Destino del vuelo.
      * @return Lista de vuelos filtrada.
      */
@@ -35,6 +35,7 @@ public class InMemoryFlightRepository implements FlightRepository {
 
     /**
      * Obtiene un vuelo por su ID.
+     *
      * @param flightId ID del vuelo.
      * @return Objeto Flight correspondiente al ID proporcionado, o null si no se encuentra.
      */
@@ -45,6 +46,7 @@ public class InMemoryFlightRepository implements FlightRepository {
 
     /**
      * Agrega un vuelo al repositorio.
+     *
      * @param flight Objeto Flight a agregar.
      * @return true si el vuelo se agregó correctamente, false si ya existe un vuelo con el mismo ID.
      */
@@ -60,8 +62,9 @@ public class InMemoryFlightRepository implements FlightRepository {
 
     /**
      * Actualiza un vuelo en el repositorio.
+     *
      * @param flightId ID del vuelo a actualizar.
-     * @param flight Objeto Flight actualizado.
+     * @param flight   Objeto Flight actualizado.
      * @return true si el vuelo se actualizó correctamente, false si no se encontró el vuelo con el ID proporcionado.
      */
     @Override
@@ -77,6 +80,7 @@ public class InMemoryFlightRepository implements FlightRepository {
 
     /**
      * Elimina un vuelo del repositorio.
+     *
      * @param flightId ID del vuelo a eliminar.
      * @return true si el vuelo se eliminó correctamente, false si no se encontró el vuelo con el ID proporcionado.
      */
@@ -92,6 +96,7 @@ public class InMemoryFlightRepository implements FlightRepository {
 
     /**
      * Lista todos los vuelos almacenados en el repositorio.
+     *
      * @return Lista de todos los vuelos.
      */
     public List<Flight> listAll() {

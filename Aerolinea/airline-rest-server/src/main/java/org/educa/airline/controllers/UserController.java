@@ -2,16 +2,13 @@ package org.educa.airline.controllers;
 
 
 import jakarta.validation.Valid;
-import org.educa.airline.Exceptions.NotExistUser;
 import org.educa.airline.dto.UserDTO;
-
 import org.educa.airline.entity.User;
+import org.educa.airline.exceptions.WhitOutPermissException;
 import org.educa.airline.mappers.UserMapper;
 import org.educa.airline.services.UserService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.BadPaddingException;
@@ -51,31 +48,31 @@ public class UserController {
      * @param userDTO Datos del pasajero a crear.
      * @return ResponseEntity con el resultado de la operación.
      */
-    @PostMapping(path = "")
-    public ResponseEntity<Void> create(@RequestBody @Valid UserDTO userDTO) throws NotExistUser {
+    @PostMapping()
+    public ResponseEntity<Void> create(@RequestBody @Valid UserDTO userDTO) {
         User user = null;
         try {
             user = userMapper.toEntity(userDTO);
-            if(!userService.exitUser(user.getUsername())) {
+<<<<<<< HEAD
+            if (!userService.exitUser(user.getUsername())) {
                 if (userService.create(user)) {
                     return ResponseEntity.status(201).build(); // Si se crea correctamente, devuelve 201 Created
                 } else {
                     return ResponseEntity.status(409).build(); // Si ya existe un pasajero con ese DNI en el vuelo, devuelve 409 Conflict
                 }
-            }else{
+            } else {
                 System.out.println("usuario duplicado no se crea");
                 return ResponseEntity.status(409).build();
+=======
+            if (userService.create(user)) {
+                return ResponseEntity.status(201).build(); // Si se crea correctamente, devuelve 201 Created
+            } else {
+                return ResponseEntity.status(409).build(); // Si ya existe un pasajero con ese DNI en el vuelo, devuelve 409 Conflict
+>>>>>>> parent of 017d3d4 (repasar autorizacion en pasajeros)
             }
-        } catch (NoSuchAlgorithmException e) {
-            return ResponseEntity.notFound().build();
-        } catch (IllegalBlockSizeException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchPaddingException e) {
-            throw new RuntimeException(e);
-        } catch (BadPaddingException e) {
-            throw new RuntimeException(e);
-        } catch (InvalidKeyException e) {
-            throw new RuntimeException(e);
+        } catch (IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException | InvalidKeyException |
+                 NoSuchAlgorithmException e) {
+            return ResponseEntity.badRequest().build();
         }
 
     }
@@ -86,7 +83,7 @@ public class UserController {
      *
      * @param username ID del usuario.
      * @return ResponseEntity con los detalles del pasajero si existe.
-     */
+     *//*
     @GetMapping(path = "/exists/{username}")
     public ResponseEntity<Void> existUser(@PathVariable("username") String username) {
         // Intenta encontrar el pasajero en el vuelo dado
@@ -95,14 +92,14 @@ public class UserController {
         } else {
             return ResponseEntity.notFound().build();
         }
-    }
-
+    }*/
     @GetMapping(path = "/{username}")
     public ResponseEntity<UserDTO> findUser(@PathVariable("username") String username) {
         try {
-            if(ResponseEntity.ok(userMapper.toDTO(userService.findUser(username)))!=null){
+<<<<<<< HEAD
+            if (userMapper.toDTO(userService.findUser(username)) != null) {
                 return ResponseEntity.ok(userMapper.toDTO(userService.findUser(username)));
-            }else{
+            } else {
                 return ResponseEntity.notFound().build();
             }
 
@@ -110,7 +107,24 @@ public class UserController {
             return ResponseEntity.notFound().build();
         } catch (IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException | NoSuchAlgorithmException |
                  InvalidKeyException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (WhitOutPermissException e) {
+            return ResponseEntity.status(403).build();
+=======
+            return ResponseEntity.ok(userMapper.toDTO(userService.findUser(username)));
+        } catch (NullPointerException e) {
+            return ResponseEntity.notFound().build();
+        } catch (IllegalBlockSizeException e) {
             throw new RuntimeException(e);
+        } catch (NoSuchPaddingException e) {
+            throw new RuntimeException(e);
+        } catch (BadPaddingException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException(e);
+>>>>>>> parent of 017d3d4 (repasar autorizacion en pasajeros)
         }
 
     }
@@ -124,9 +138,7 @@ public class UserController {
      */
     @PutMapping(path = "/{username}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable("username") String username, @RequestBody UserDTO userDTO) {
-
         User user = null;
-
 
         if (!username.isBlank()) {
             try {
@@ -141,8 +153,9 @@ public class UserController {
                 }
             } catch (NoSuchAlgorithmException e) {
                 return ResponseEntity.badRequest().build();
+            } catch (WhitOutPermissException e) {
+                return ResponseEntity.status(403).build();
             } catch (Exception e) {
-
                 return ResponseEntity.badRequest().build(); // Si ocurre algún otro error, devuelve 400 Bad Request
             }
         } else {
@@ -162,11 +175,15 @@ public class UserController {
         try {
             if (userService.delete(username)) {
                 return ResponseEntity.ok().build(); // Si se elimina correctamente, devuelve 200 OK
+            }else{
+                return ResponseEntity.notFound().build();
             }
-        } catch (Exception e) {
+        } catch (WhitOutPermissException e) {
             return ResponseEntity.status(403).build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.badRequest().build(); // Si ocurre algún otro error, devuelve 400 Bad Request
+         // Si ocurre algún otro error, devuelve 400 Bad Request
 
     }
 
