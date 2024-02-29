@@ -33,6 +33,31 @@ public class SecurityService {
         return securityUtil.createHash(message);
     }
 
+<<<<<<< HEAD
 
 
+=======
+    @Override
+    public String encode(CharSequence rawPassword) {
+        try {
+            return hash(rawPassword.toString());
+        } catch (Exception e) {
+           // System.err.println(e);
+        }
+        return null;
+    }
+
+    @Override
+    public boolean matches(CharSequence rawPassword, String encodedPassword) {
+        boolean find = false;
+        try {
+            if (encode(rawPassword).equals(encodedPassword)) {
+                find = true;
+            }
+        } catch (Exception e) {
+            //System.err.println(e);
+        }
+        return find;
+    }
+>>>>>>> parent of 12b144b (funcional)
 }

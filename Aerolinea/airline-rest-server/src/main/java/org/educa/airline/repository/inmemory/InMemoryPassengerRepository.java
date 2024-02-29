@@ -5,10 +5,7 @@ import org.educa.airline.entity.Passenger;
 import org.educa.airline.repository.PassengerRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -21,7 +18,6 @@ public class InMemoryPassengerRepository implements PassengerRepository {
 
     /**
      * Obtiene una lista de todos los pasajeros de todos los vuelos.
-     *
      * @return Lista de todos los pasajeros.
      */
     @Override
@@ -33,7 +29,6 @@ public class InMemoryPassengerRepository implements PassengerRepository {
 
     /**
      * Obtiene una lista de todos los pasajeros de un vuelo específico.
-     *
      * @param flightId ID del vuelo.
      * @return Lista de pasajeros del vuelo especificado.
      */
@@ -44,9 +39,8 @@ public class InMemoryPassengerRepository implements PassengerRepository {
 
     /**
      * Obtiene un pasajero específico de un vuelo.
-     *
      * @param flightId ID del vuelo.
-     * @param nif      NIF del pasajero.
+     * @param nif NIF del pasajero.
      * @return Pasajero encontrado, o null si no existe.
      */
     @Override
@@ -56,9 +50,8 @@ public class InMemoryPassengerRepository implements PassengerRepository {
 
     /**
      * Verifica si un pasajero existe en un vuelo.
-     *
      * @param flightId ID del vuelo.
-     * @param nif      NIF del pasajero.
+     * @param nif NIF del pasajero.
      * @return true si el pasajero existe en el vuelo, false en caso contrario.
      */
     @Override
@@ -68,9 +61,8 @@ public class InMemoryPassengerRepository implements PassengerRepository {
 
     /**
      * Elimina un pasajero de un vuelo.
-     *
      * @param flightId ID del vuelo.
-     * @param nif      NIF del pasajero.
+     * @param nif NIF del pasajero.
      * @return true si el pasajero se eliminó correctamente, false si el pasajero no existía en el vuelo.
      */
     @Override
@@ -80,7 +72,6 @@ public class InMemoryPassengerRepository implements PassengerRepository {
 
     /**
      * Añade un pasajero a un vuelo.
-     *
      * @param passenger Pasajero a añadir.
      * @return true si el pasajero se agregó correctamente, false si ya existe en el vuelo.
      */
@@ -96,8 +87,7 @@ public class InMemoryPassengerRepository implements PassengerRepository {
 
     /**
      * Actualiza la información de un pasajero en un vuelo.
-     *
-     * @param nif       NIF del pasajero a actualizar.
+     * @param nif NIF del pasajero a actualizar.
      * @param passenger Pasajero con la información actualizada.
      */
     @Override

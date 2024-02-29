@@ -7,6 +7,7 @@ import org.educa.airline.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
@@ -20,17 +21,15 @@ import java.util.List;
  */
 @Component
 public class UserMapper {
-    private final SecurityUtil securityUtil;
-
+    private final   SecurityUtil securityUtil;
     @Autowired
-    UserMapper(SecurityUtil securityUtil) {
+    UserMapper(SecurityUtil securityUtil){
         this.securityUtil = securityUtil;
     }
 
 
     /**
      * Convierte un objeto PassengerDTO a un objeto Passenger.
-     *
      * @param userDTO Objeto PassengerDTO a convertir.
      * @return Objeto Passenger resultante.
      */
@@ -49,7 +48,6 @@ public class UserMapper {
 
     /**
      * Convierte un objeto Passenger a un objeto PassengerDTO.
-     *
      * @param user Objeto Passenger a convertir.
      * @return Objeto PassengerDTO resultante.
      */
@@ -58,7 +56,7 @@ public class UserMapper {
     public UserDTO toDTO(User user) throws NullPointerException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException, InvalidKeyException {
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername(user.getUsername());
-        userDTO.setPassword(null);
+        userDTO.setPassword(user.getPassword());
         userDTO.setNif(securityUtil.decrypt(user.getNif()));
         userDTO.setName(user.getName());
         userDTO.setSurname(user.getSurname());
@@ -69,13 +67,12 @@ public class UserMapper {
 
     /**
      * Convierte una lista de objetos Passenger a una lista de objetos PassengerDTO.
-     *
      * @param userList Lista de objetos user a convertir.
      * @return Lista de objetos PassengerDTO resultante.
      */
-    public List<UserDTO> toDTOs(List<User> userList) throws IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException, InvalidKeyException {
+    public List<UserDTO> toDTOs (List<User> userList) throws IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException, InvalidKeyException {
         List<UserDTO> userDTOs = new ArrayList<>();
-        for (User user : userList) {
+        for (User user: userList){
             UserDTO usertDTO = toDTO(user);
             userDTOs.add(usertDTO);
         }

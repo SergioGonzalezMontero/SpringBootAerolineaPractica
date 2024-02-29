@@ -1,8 +1,11 @@
 package org.educa.airline.dto;
 
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  * DTO (Data Transfer Object) para representar un vuelo.

@@ -1,6 +1,7 @@
 package org.educa.airline.services;
 
 import org.educa.airline.entity.Flight;
+import org.educa.airline.repository.FlightRepository;
 import org.educa.airline.repository.inmemory.InMemoryFlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,26 +12,23 @@ import java.util.List;
 @Service
 public class FlightService {
     private final InMemoryFlightRepository inMemoryFlightRepository;
-
     @Autowired
     public FlightService(InMemoryFlightRepository inMemoryFlightRepository) {
         this.inMemoryFlightRepository = inMemoryFlightRepository;
     }
 
-    public List<Flight> findAllFlight(String origin, String destination) {
-        return inMemoryFlightRepository.list(origin, destination);
+    public List<Flight> findAllFlight(String origin, String destination){
+        return inMemoryFlightRepository.list(origin,destination);
     }
 
 
-    public Flight findFlightByIdDate(String id, Date date) throws Exception {
+    public Flight findFlightByIdDate(String id, Date date) throws Exception{
 
         return inMemoryFlightRepository.getFlight(id);
     }
-
-    public boolean create(Flight flight) {
+    public boolean create(Flight flight){
         return inMemoryFlightRepository.add(flight);
     }
-
     public boolean update(Flight flight, String id) throws Exception {
         return inMemoryFlightRepository.updateFlight(id, flight);
     }
@@ -39,11 +37,11 @@ public class FlightService {
         return inMemoryFlightRepository.delete(id);
     }
 
-    public List<Flight> findAllFlight() {
+    public List<Flight> findAllFlight(){
         return inMemoryFlightRepository.listAll();
     }
 
-    public Boolean existFlight(String id) {
-        return inMemoryFlightRepository.getFlight(id) != null;
+    public Boolean existFlight(String id){
+        return inMemoryFlightRepository.getFlight(id)!=null;
     }
 }
