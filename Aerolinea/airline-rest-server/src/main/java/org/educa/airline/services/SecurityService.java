@@ -13,7 +13,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 @Service
-public class SecurityService implements PasswordEncoder {
+public class SecurityService {
     private final SecurityUtil securityUtil;
 
     @Autowired
@@ -33,30 +33,6 @@ public class SecurityService implements PasswordEncoder {
         return securityUtil.createHash(message);
     }
 
-    @Override
-    public String encode(CharSequence rawPassword) {
-        try {
-            return hash(rawPassword.toString());
-        } catch (Exception e) {
-<<<<<<< HEAD
-            // System.err.println(e);
-=======
-            System.err.println(e);
->>>>>>> parent of 017d3d4 (repasar autorizacion en pasajeros)
-        }
-        return null;
-    }
 
-    @Override
-    public boolean matches(CharSequence rawPassword, String encodedPassword) {
-        boolean find = false;
-        try {
-            if (encode(rawPassword).equals(encodedPassword)) {
-                find = true;
-            }
-        } catch (Exception e) {
-            System.err.println(e);
-        }
-        return find;
-    }
+
 }

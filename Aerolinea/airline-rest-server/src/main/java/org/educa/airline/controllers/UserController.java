@@ -48,34 +48,7 @@ public class UserController {
      * @param userDTO Datos del pasajero a crear.
      * @return ResponseEntity con el resultado de la operación.
      */
-    @PostMapping()
-    public ResponseEntity<Void> create(@RequestBody @Valid UserDTO userDTO) {
-        User user = null;
-        try {
-            user = userMapper.toEntity(userDTO);
-<<<<<<< HEAD
-            if (!userService.exitUser(user.getUsername())) {
-                if (userService.create(user)) {
-                    return ResponseEntity.status(201).build(); // Si se crea correctamente, devuelve 201 Created
-                } else {
-                    return ResponseEntity.status(409).build(); // Si ya existe un pasajero con ese DNI en el vuelo, devuelve 409 Conflict
-                }
-            } else {
-                System.out.println("usuario duplicado no se crea");
-                return ResponseEntity.status(409).build();
-=======
-            if (userService.create(user)) {
-                return ResponseEntity.status(201).build(); // Si se crea correctamente, devuelve 201 Created
-            } else {
-                return ResponseEntity.status(409).build(); // Si ya existe un pasajero con ese DNI en el vuelo, devuelve 409 Conflict
->>>>>>> parent of 017d3d4 (repasar autorizacion en pasajeros)
-            }
-        } catch (IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException | InvalidKeyException |
-                 NoSuchAlgorithmException e) {
-            return ResponseEntity.badRequest().build();
-        }
 
-    }
 
 
     /**
@@ -93,41 +66,7 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }*/
-    @GetMapping(path = "/{username}")
-    public ResponseEntity<UserDTO> findUser(@PathVariable("username") String username) {
-        try {
-<<<<<<< HEAD
-            if (userMapper.toDTO(userService.findUser(username)) != null) {
-                return ResponseEntity.ok(userMapper.toDTO(userService.findUser(username)));
-            } else {
-                return ResponseEntity.notFound().build();
-            }
 
-        } catch (NullPointerException e) {
-            return ResponseEntity.notFound().build();
-        } catch (IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException | NoSuchAlgorithmException |
-                 InvalidKeyException e) {
-            return ResponseEntity.badRequest().build();
-        } catch (WhitOutPermissException e) {
-            return ResponseEntity.status(403).build();
-=======
-            return ResponseEntity.ok(userMapper.toDTO(userService.findUser(username)));
-        } catch (NullPointerException e) {
-            return ResponseEntity.notFound().build();
-        } catch (IllegalBlockSizeException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchPaddingException e) {
-            throw new RuntimeException(e);
-        } catch (BadPaddingException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        } catch (InvalidKeyException e) {
-            throw new RuntimeException(e);
->>>>>>> parent of 017d3d4 (repasar autorizacion en pasajeros)
-        }
-
-    }
 
     /**
      * Actualiza los detalles de un pasajero en un vuelo.
@@ -136,32 +75,7 @@ public class UserController {
      * @param userDTO  Nuevos detalles del pasajero.
      * @return ResponseEntity con los detalles del pasajero actualizados.
      */
-    @PutMapping(path = "/{username}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable("username") String username, @RequestBody UserDTO userDTO) {
-        User user = null;
 
-        if (!username.isBlank()) {
-            try {
-                user = userMapper.toEntity(userDTO);
-                // Intenta actualizar los detalles del pasajero en el vuelo dado
-                if (userService.update(user, username)) {
-
-                    // Si se actualiza correctamente, devuelve los detalles actualizados del usuario
-                    return ResponseEntity.ok(userMapper.toDTO(user));
-                } else {
-                    return ResponseEntity.notFound().build(); // Si el pasajero no existe en el vuelo, devuelve 404 Not Found
-                }
-            } catch (NoSuchAlgorithmException e) {
-                return ResponseEntity.badRequest().build();
-            } catch (WhitOutPermissException e) {
-                return ResponseEntity.status(403).build();
-            } catch (Exception e) {
-                return ResponseEntity.badRequest().build(); // Si ocurre algún otro error, devuelve 400 Bad Request
-            }
-        } else {
-            return ResponseEntity.badRequest().build(); // Si el nombre no es válido, devuelve 400 Bad Request
-        }
-    }
 
     /**
      * Elimina un pasajero de un vuelo.
@@ -169,23 +83,7 @@ public class UserController {
      * @param username del usuario.
      * @return ResponseEntity con el resultado de la operación.
      */
-    @DeleteMapping(path = "/{username}")
-    public ResponseEntity<Void> deleteUser(@Valid @PathVariable("username") String username) {
 
-        try {
-            if (userService.delete(username)) {
-                return ResponseEntity.ok().build(); // Si se elimina correctamente, devuelve 200 OK
-            }else{
-                return ResponseEntity.notFound().build();
-            }
-        } catch (WhitOutPermissException e) {
-            return ResponseEntity.status(403).build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
-         // Si ocurre algún otro error, devuelve 400 Bad Request
-
-    }
 
 }
 

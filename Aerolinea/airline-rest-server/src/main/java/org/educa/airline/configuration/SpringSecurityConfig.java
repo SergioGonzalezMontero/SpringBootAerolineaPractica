@@ -38,42 +38,7 @@ public class SpringSecurityConfig {
         return securityService;
     }
 
-    @Bean
-    protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors(AbstractHttpConfigurer::disable).csrf(AbstractHttpConfigurer::disable)
-                .httpBasic(withDefaults()).authorizeHttpRequests(
-                        request -> request.requestMatchers("/user").anonymous()
 
-<<<<<<< HEAD
-                                .requestMatchers(HttpMethod.GET, "/user/{username}").hasAnyRole("admin", "personal", "usuario")
-                                .requestMatchers(HttpMethod.DELETE, "/user/{username}").hasAnyRole("admin", "usuario")
-                                .requestMatchers(HttpMethod.PUT, "/user/{username}").hasAnyRole("admin", "usuario")
-                                .requestMatchers( "/flights/create").hasRole("admin")
-                                .requestMatchers(HttpMethod.DELETE, "/flights/{id}").hasRole("admin")
-                                .requestMatchers("/flights").authenticated()
-                                .requestMatchers(HttpMethod.GET, "/flights/{id}").authenticated()
-                                .requestMatchers("/flights/{id}/passenger").hasRole("personal")
-                                .requestMatchers(HttpMethod.GET, "/flights/{id}/passenger/{nif}").hasRole("personal")
-                                .requestMatchers(HttpMethod.PUT, "/flights/{id}/passenger/{nif}").hasRole("personal")
-                                .requestMatchers(HttpMethod.DELETE, "/flights/{id}/passenger/{nif}").hasRole("personal")
-                                .requestMatchers("/flights/{id}/passengers}").hasRole("personal")
-=======
-                                .requestMatchers(HttpMethod.GET,"/user/{username}").hasAnyRole("admin","usuario")
-                                .requestMatchers(HttpMethod.DELETE,"/user/{username}").hasAnyRole("admin","usuario")
-                                .requestMatchers("/user/{username}").authenticated()
-                                .requestMatchers(HttpMethod.PUT,"/user/{username}").hasAnyRole("admin","usuario")
-                                .requestMatchers(HttpMethod.GET,"/flights").authenticated()
-                                .requestMatchers(HttpMethod.GET,"/flights/{id}").authenticated()
-                                .requestMatchers("flights/{id}/passenger").hasRole("personal")
-                                .requestMatchers(HttpMethod.GET,"flights/{id}/passenger/{nif}").hasRole("personal")
-                                .requestMatchers(HttpMethod.PUT,"flights/{id}/passenger/{nif}").hasRole("personal")
-                                .requestMatchers(HttpMethod.DELETE,"flights/{id}/passenger/{nif}").hasRole("personal")
-                                .requestMatchers("flights/{id}/passengers}").hasRole("personal")
->>>>>>> parent of 017d3d4 (repasar autorizacion en pasajeros)
-                                .anyRequest().authenticated());
-
-        return http.build();
-    }
 
 
 }
